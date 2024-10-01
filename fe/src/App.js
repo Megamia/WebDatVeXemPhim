@@ -4,8 +4,11 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./Pages/Home/Home";
 
 function App() {
+  const handleContextMenu = (e) => {
+    e.preventDefault();
+  };
   return (
-    <div className="App">
+    <div className="App" onContextMenu={handleContextMenu}>
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />

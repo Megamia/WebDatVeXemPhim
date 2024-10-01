@@ -25,7 +25,7 @@ const Header = () => {
             </button>
             <div className="hidden mb-2 group-focus-within:flex gap-1 items-center text-black bg-white py-1 px-2 rounded-[20px]">
               <input
-                className="bg-transparent outline-none md:w-[350px] text-[17px] ml-6"
+                className="bg-transparent outline-none md:w-[350px] w-[150px] text-[17px] ml-6"
                 placeholder="Tìm kiếm"
               />
             </div>
