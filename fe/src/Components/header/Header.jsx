@@ -30,7 +30,7 @@ const Header = () => {
               />
             </div>
           </div>
-          <NavLink className="mb-3 whitespace-nowrap" to="#">
+          <NavLink className="mb-3 hidden sm:flex whitespace-nowrap" to="#">
             Trang chủ
           </NavLink>
           <div className="flex items-center">
