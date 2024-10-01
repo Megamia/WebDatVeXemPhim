@@ -36,3 +36,18 @@
     transform: rotate(360deg);
   }
 }
+
+/* For WebKit browsers (Chrome, Safari) */
+::-webkit-scrollbar {
+  width: 5px; /* Set the width of the scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  --tw-bg-opacity: 1;
+  background-color: rgb(147 197 253 / var(--tw-bg-opacity)) /* #93c5fd */; 
+}
+
+::-webkit-scrollbar-thumb {
+  background: #014045;
+}
+
