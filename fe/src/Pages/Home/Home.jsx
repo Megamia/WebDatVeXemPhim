@@ -3,6 +3,7 @@ import Header from "../../Components/header/Header";
 import Footer from "../../Components/footer/Footer";
 import "./Home.css";
 import { NavLink } from "react-router-dom";
+import { FaPlay } from "react-icons/fa";
 
 const Home = () => {
   const movies = [
@@ -54,8 +55,8 @@ const Home = () => {
                 </h1>
               </div>
               <div className="flex items-center mb-4">
-                <button className="flex items-center bg-purple-600 text-white px-4 py-2 rounded mr-4">
-                  <i className="fas fa-play mr-2"></i>
+                <button className="flex items-center bg-purple-600 text-white px-4 py-2 rounded mr-4 gap-2">
+                  <FaPlay />
                   <NavLink to="https://www.youtube.com/watch?v=dQw4w9WgXcQ">
                     TRAILER
                   </NavLink>
@@ -110,7 +111,7 @@ const Home = () => {
             {movies.map((movie, index) => (
               <div
                 key={index}
-                className="bg-gray-800 p-4 w-[350px] rounded-lg justify-between flex flex-col"
+                className="bg-gray-800 p-4 w-[350px] rounded-lg justify-between flex flex-col text-left "
               >
                 <img
                   src={movie.image}
@@ -128,7 +129,7 @@ const Home = () => {
             ))}
           </div>
         </div>
-        <div className="bg-[#33173C] w-full h-[20px]" />
+        <div className="bg-[#33173C] w-full h-[700px]" />
       </div>
       <Footer />
     </div>
