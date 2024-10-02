@@ -2,6 +2,7 @@ import React from "react";
 import Header from "../../Components/header/Header";
 import Footer from "../../Components/footer/Footer";
 import "./Home.css";
+import { NavLink } from "react-router-dom";
 
 const Home = () => {
   const movies = [
@@ -54,7 +55,10 @@ const Home = () => {
               </div>
               <div className="flex items-center mb-4">
                 <button className="flex items-center bg-purple-600 text-white px-4 py-2 rounded mr-4">
-                  <i className="fas fa-play mr-2"></i> TRAILER
+                  <i className="fas fa-play mr-2"></i>
+                  <NavLink to="https://www.youtube.com/watch?v=dQw4w9WgXcQ">
+                    TRAILER
+                  </NavLink>
                 </button>
                 <button className="flex items-center bg-gray-800 text-white px-4 py-2 rounded">
                   GET TICKETS
