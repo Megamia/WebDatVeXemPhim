@@ -12,7 +12,7 @@ const Header = () => {
     setIsMenuOpen((prev) => !prev);
   };
   return (
-    <div className="bg-black bg-opacity-35 w-full flex justify-center pt-[20px] absolute">
+    <div className="bg-black bg-opacity-45 w-full flex justify-center pt-[20px] absolute z-20">
       <div className="max-w-[1140px] w-full bg-transparent h-full flex justify-between items-end px-3">
         <div className="h-full w-[100px] flex justify-center items-center mb-2">
           <img className="w-[80px]" src="./img/logowebsite.png" alt="logo" />
