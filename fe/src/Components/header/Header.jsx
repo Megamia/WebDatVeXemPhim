@@ -15,7 +15,7 @@ const Header = () => {
     <div className="bg-black bg-opacity-45 w-full flex justify-center pt-[20px] absolute z-20">
       <div className="max-w-[1140px] w-full bg-transparent h-full flex justify-between items-end px-3">
         <div className="h-full w-[100px] flex justify-center items-center mb-2">
-          <img className="w-[80px]" src="./img/logowebsite.png" alt="logo" />
+          <img className="w-[80px]" src="../../img/logowebsite.png" alt="logo" />
         </div>
         <div className="flex gap-5 text-[20px] justify-center items-center text-white">
           <div className="relative group flex items-center">
@@ -30,7 +30,7 @@ const Header = () => {
               />
             </div>
           </div>
-          <NavLink className="mb-3 hidden sm:flex whitespace-nowrap" to="#">
+          <NavLink className="mb-3 hidden sm:flex whitespace-nowrap" to="/">
             Trang chủ
           </NavLink>
           <div className="flex items-center">

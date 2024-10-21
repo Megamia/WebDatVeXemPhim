@@ -73,15 +73,17 @@ const Slider1 = () => {
               </h1>
             </div>
             <div className="flex items-center">
-              <button className="flex items-center bg-purple-600 text-white px-4 py-2 rounded mr-4 gap-2">
-                <FaPlay />
-                <NavLink to={`${movies[currentSlide].trailer}`}>
+              <NavLink to={`${movies[currentSlide].trailer}`}>
+                <button className="flex items-center bg-purple-600 text-white px-4 py-2 rounded mr-4 gap-2">
+                  <FaPlay />
                   TRAILER
-                </NavLink>
-              </button>
-              <button className="flex items-center bg-gray-800 text-white px-4 py-2 rounded">
-                GET TICKETS
-              </button>
+                </button>
+              </NavLink>
+              <NavLink to={`/phim/${movies[currentSlide].id_phim}`}>
+                <button className="flex items-center bg-gray-800 text-white px-4 py-2 rounded">
+                  GET TICKETS
+                </button>
+              </NavLink>
             </div>
           </div>
         )}
