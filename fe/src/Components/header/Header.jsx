@@ -15,7 +15,9 @@ const Header = () => {
     <div className="bg-black bg-opacity-45 w-full flex justify-center pt-[20px] absolute z-20">
       <div className="max-w-[1140px] w-full bg-transparent h-full flex justify-between items-end px-3">
         <div className="h-full w-[100px] flex justify-center items-center mb-2">
+        <NavLink  to="/">
           <img className="w-[80px]" src="../../img/logowebsite.png" alt="logo" />
+          </NavLink>
         </div>
         <div className="flex gap-5 text-[20px] justify-center items-center text-white">
           <div className="relative group flex items-center">
@@ -79,8 +81,8 @@ const Header = () => {
               </NavLink>
             </div>
           </div>
-          <NavLink className="mb-3" to="#">
-            <FaUser className="text-white text-[25px] mx-2" />
+          <NavLink className="mb-3" to="/dang-nhap">
+            <FaUser className="text-white text-[25px] mx-2 " />
           </NavLink>
         </div>
       </div>

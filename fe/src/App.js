@@ -1,12 +1,12 @@
-import React from 'react';
+import React from "react";
 import "./App.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./Pages/Home/Home";
-import MovieInfor from './Pages/Movie/MovieInfor';
-import MovieShowtimes from './Pages/Movie/MovieShowtimes';
-import BuyTickets from './Pages/BuyTickets/BuyTickets';
-import Pay from './Pages/Pay/Pay';
-
+import MovieInfor from "./Pages/Movie/MovieInfor";
+import MovieShowtimes from "./Pages/Movie/MovieShowtimes";
+import BuyTickets from "./Pages/BuyTickets/BuyTickets";
+import Pay from "./Pages/Pay/Pay";
+import Login from "./Pages/User/login/Login";
 
 function App() {
   const handleContextMenu = (e) => {
@@ -22,6 +22,7 @@ function App() {
           <Route path="/lich-chieu/:id" element={<MovieShowtimes />} />
           <Route path="/mua-ve/:id" element={<BuyTickets />} />
           <Route path="/thanh-toan/:id" element={<Pay />} />
+          <Route path="/dang-nhap/" element={<Login />} />
         </Routes>
       </Router>
     </div>
