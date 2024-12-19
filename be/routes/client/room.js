@@ -18,7 +18,7 @@ router.get("/:id", (req, res) => {
     SELECT 
       phong_chieu.ten_phong AS ten_phong, 
       cho_ngoi.ten AS cho_ngoi, 
-      cho_ngoi.tinh_trang 
+      cho_ngoi.id AS id
     FROM phong_chieu
     LEFT JOIN cho_ngoi ON phong_chieu.id = cho_ngoi.id_phong
     WHERE phong_chieu.id = ?`;
@@ -35,7 +35,7 @@ router.get("/:id", (req, res) => {
     const tenPhong = results[0].ten_phong;
     const danhSachChoNgoi = results.map((row) => ({
       ten: row.cho_ngoi,
-      tinh_trang: row.tinh_trang,
+      id: row.id,
     }));
 
     res.status(200).json({ ten_phong: tenPhong, cho_ngoi: danhSachChoNgoi });

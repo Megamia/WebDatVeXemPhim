@@ -24,11 +24,13 @@ const userRoutes = require("./routes/client/user");
 const movieRoutes = require("./routes/admin/movie");
 const roomRoutes = require("./routes/client/room");
 const lichchieuRoutes = require("./routes/client/lichchieu");
-// Sử dụng route cho user
+const suatchieuRoutes = require("./routes/client/suatchieu")
+
 app.use("/api/users", userRoutes);
 app.use("/api/movies", movieRoutes);
 app.use("/api/rooms", roomRoutes);
 app.use("/api/lich-chieu", lichchieuRoutes);
+app.use("/api/suat-chieu",suatchieuRoutes);
 
 // Chạy server
 app.listen(port, () => {
