@@ -123,42 +123,41 @@ const Login = () => {
 
   //SIGNUP//
   const handleSignup = async (event) => {
-    if (
-      !fullname.trim() ||
-      !username.trim() ||
-      !email.trim() ||
-      !password.trim() ||
-      !phone.trim()
-    ) {
+    event.preventDefault();
+
+    if (!username.trim() || !email.trim() || !password.trim()) {
       setErrors("Vui lòng điền vào trường này");
       return;
     }
-    event.preventDefault();
 
     if (username === "admin") {
       alert("Không được đăng kí với username=admin");
       return;
     }
+
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/signup`,
+        `${process.env.REACT_APP_API_URL}/api/dang-ky`,
         {
           username,
-          fullname,
           email,
           password,
-          phone,
         }
       );
-
-      console.log("Signup successful:", response.data);
-      dangkythanhcong();
-      handleLoginClick();
+      if (response.status === 409) {
+        dangkythatbai();
+      }
+      else if (response.status === 200) {
+        console.log("Signup successful:", response.data.message);
+        dangkythanhcong();
+        handleLoginClick();
+      }
     } catch (error) {
       console.error("Error signing up:", error);
-      dangkythatbai();
+      setErrors("Có lỗi xảy ra. Vui lòng thử lại.");
     }
   };
+
   const [isSignUpActive, setIsSignUpActive] = useState(false);
 
   const handleSignUpClick = () => {
@@ -207,15 +206,7 @@ const Login = () => {
                 <span className="text-[15px] mb-[10px] text-white">
                   or use your email for registration
                 </span>
-                <input
-                  type="text"
-                  name="fullname"
-                  value={fullname}
-                  className="inputUser"
-                  placeholder="Tên đầy đủ"
-                  onChange={(e) => setFullName(e.target.value)}
-                  required
-                />
+
                 <input
                   type="text"
                   name="username"
@@ -242,20 +233,6 @@ const Login = () => {
                   className="inputUser"
                   placeholder="Email"
                   onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-
-                <input
-                  type="text"
-                  name="phone"
-                  value={phone}
-                  className="inputUser"
-                  placeholder="Số điện thoại"
-                  pattern="[0-9]*"
-                  onChange={(e) => setPhone(e.target.value)}
-                  onInput={(e) => {
-                    e.target.value = e.target.value.replace(/\D/g, "");
-                  }}
                   required
                 />
 
