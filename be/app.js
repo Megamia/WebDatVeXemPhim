@@ -26,6 +26,7 @@ const roomRoutes = require("./routes/client/room");
 const lichchieuRoutes = require("./routes/client/lichchieu");
 const suatchieuRoutes = require("./routes/client/suatchieu");
 const thanhtoanRoutes = require("./routes/client/thanhtoan");
+const dangnhapRoutes = require("./routes/client/Login/login");
 
 app.use("/api/users", userRoutes);
 app.use("/api/movies", movieRoutes);
@@ -33,6 +34,7 @@ app.use("/api/rooms", roomRoutes);
 app.use("/api/lich-chieu", lichchieuRoutes);
 app.use("/api/suat-chieu",suatchieuRoutes);
 app.use("/api/thanh-toan",thanhtoanRoutes);
+app.use("/api/dang-nhap",dangnhapRoutes);
 // Chạy server
 app.listen(port, () => {
   console.log(`Server đang chạy tại http://localhost:${port}`);

@@ -70,7 +70,7 @@ const Login = () => {
 
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/login`,
+        `${process.env.REACT_APP_API_URL}/api/dang-nhap`,
         {
           username: User,
           password: Password,
@@ -95,7 +95,7 @@ const Login = () => {
         }).then((result) => {
           if (result.isConfirmed || result.isDismissed) {
             window.scrollTo(0, 0);
-            // navigate("/Profile");
+            navigate("/");
           }
         });
         return;
@@ -209,7 +209,6 @@ const Login = () => {
                 </span>
                 <input
                   type="text"
-                  id="fullname"
                   name="fullname"
                   value={fullname}
                   className="inputUser"
@@ -219,7 +218,6 @@ const Login = () => {
                 />
                 <input
                   type="text"
-                  id="username"
                   name="username"
                   value={username}
                   className="inputUser"
@@ -229,7 +227,6 @@ const Login = () => {
                 />
                 <input
                   type="password"
-                  id="password"
                   name="password"
                   value={password}
                   className="inputUser"
@@ -240,7 +237,6 @@ const Login = () => {
 
                 <input
                   type="email"
-                  id="email"
                   name="email"
                   value={email}
                   className="inputUser"
@@ -251,7 +247,6 @@ const Login = () => {
 
                 <input
                   type="text"
-                  id="phone"
                   name="phone"
                   value={phone}
                   className="inputUser"
@@ -303,7 +298,6 @@ const Login = () => {
                 </span>
                 <input
                   type="text"
-                  id="username"
                   value={User}
                   onChange={handleUserChange}
                   placeholder="Tên đăng nhập"
@@ -311,7 +305,6 @@ const Login = () => {
                 />
                 <input
                   type="password"
-                  id="password"
                   value={Password}
                   onChange={handlePasswordChange}
                   placeholder="Mật khẩu"
