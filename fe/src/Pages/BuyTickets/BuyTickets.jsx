@@ -1,19 +1,47 @@
 import React, { useEffect, useState } from "react";
 import Header from "../../Components/header/Header";
 import Footer from "../../Components/footer/Footer";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import BuyTicketsNav from "../../Components/nav/BuyTicketsNav";
 import axios from "axios";
 import "./BuyTickets.css";
-import { InputNumber, Button, Space, Table } from "antd";
+import random from "random-string-generator";
 
 const BuyTickets = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [suatchieu, setSuatchieu] = useState([]);
   const [chongoi, setChongoi] = useState([]);
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [navative, setNavative] = useState("chon-ghe");
+
+  const commit = async () => {
+    let isUnique = false;
+    let code = "";
+    while (!isUnique) {
+      code = random(10, "uppernumeric");
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/api/thanh-toan/${id}/${code}`
+        );
+        if (response.data?.exists) {
+          console.log(`Code ${code} đã tồn tại. Tạo lại...`);
+        } else {
+          isUnique = true;
+        }
+      } catch (error) {
+        console.error("Lỗi khi kiểm tra mã:", error);
+      }
+    }
+    navigate(`/thanh-toan/${code}`, {
+      state: {
+        seats: selectedSeats,
+        totalPrice: totalPrice,
+      },
+    });
+  };
+
   useEffect(() => {
     const fetchMovies = async () => {
       try {
@@ -138,7 +166,7 @@ const BuyTickets = () => {
                 </div>
                 <div className="flex gap-5">
                   <div className="flex-1 p-2 bg-gray-800 rounded-md text-white">
-                    <a href={`/thanh-toan/${id}`}>Tiếp tục</a>
+                    <button onClick={commit}>Tiếp tục</button>
                   </div>
                 </div>
               </div>
