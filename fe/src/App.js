@@ -5,6 +5,7 @@ import Home from "./Pages/Home/Home";
 import MovieInfor from './Pages/Movie/MovieInfor';
 import MovieShowtimes from './Pages/Movie/MovieShowtimes';
 import BuyTickets from './Pages/BuyTickets/BuyTickets';
+import Pay from './Pages/Pay/Pay';
 
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
           <Route path="/phim/:id" element={<MovieInfor />} />
           <Route path="/lich-chieu/:id" element={<MovieShowtimes />} />
           <Route path="/mua-ve/:id" element={<BuyTickets />} />
+          <Route path="/thanh-toan/:id" element={<Pay />} />
         </Routes>
       </Router>
     </div>

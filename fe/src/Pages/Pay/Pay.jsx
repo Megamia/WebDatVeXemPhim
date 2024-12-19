@@ -4,10 +4,8 @@ import Footer from "../../Components/footer/Footer";
 import { useParams } from "react-router-dom";
 import BuyTicketsNav from "../../Components/nav/BuyTicketsNav";
 import axios from "axios";
-import "./BuyTickets.css";
-import { InputNumber, Button, Space, Table } from "antd";
 
-const BuyTickets = () => {
+const Pay = () => {
   const { id } = useParams();
   const [suatchieu, setSuatchieu] = useState([]);
   const [chongoi, setChongoi] = useState([]);
@@ -138,7 +136,7 @@ const BuyTickets = () => {
                 </div>
                 <div className="flex gap-5">
                   <div className="flex-1 p-2 bg-gray-800 rounded-md text-white">
-                    <a href={`/thanh-toan/${id}`}>Tiếp tục</a>
+                    <a href="#">Tiếp tục</a>
                   </div>
                 </div>
               </div>
@@ -151,4 +149,4 @@ const BuyTickets = () => {
   );
 };
 
-export default BuyTickets;
+export default Pay;

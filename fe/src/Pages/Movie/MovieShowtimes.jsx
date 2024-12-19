@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Header from "../../Components/header/Header";
 import Footer from "../../Components/footer/Footer";
-import {useParams, useNavigate  } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Moviedetail from "../../Components/movie/Moviedetail";
 import MovieNav from "../../Components/nav/MovieNav";
 import axios from "axios";
@@ -72,15 +72,19 @@ const MovieShowtimes = () => {
             </ul>
             <ul className="flex flex-wrap gap-2 pt-2">
               {lichchieu.map((lichchieu) => {
-                const isDisabled = new Date(lichchieu.thoi_gian) < new Date(); // Kiểm tra thời gian
+                const isDisabled = false;
                 return (
                   <button
                     key={lichchieu.id}
                     disabled={isDisabled}
                     onClick={() => handleButtonClick(lichchieu.id)} // Sự kiện chuyển trang
-                    className={`p-2 rounded-md ${
-                      isDisabled ? "bg-gray-400" : "bg-white hover:bg-gray-200"
-                    }`}
+                    className={`p-2 rounded-md 
+                      ${
+                        isDisabled
+                          ? "bg-gray-400"
+                          : "bg-white hover:bg-gray-200"
+                      }
+                    `}
                   >
                     <li>
                       {new Date(lichchieu.thoi_gian).toLocaleString("vi-VN", {
