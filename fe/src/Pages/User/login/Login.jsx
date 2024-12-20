@@ -80,7 +80,7 @@ const Login = () => {
       if (response.status === 200) {
         const token = response.data.token;
         const d = new Date();
-        d.setTime(d.getTime() + 1 * 60 * 60 * 1000); // 1 giờ
+        d.setTime(d.getTime() + 1 * 60 * 60 * 1000);
         const expires = "expires=" + d.toUTCString();
         document.cookie = `token=${token}; ${expires}; path=/; secure;`;
         // localStorage.setItem("isLoggedIn", "true");
@@ -95,7 +95,7 @@ const Login = () => {
         }).then((result) => {
           if (result.isConfirmed || result.isDismissed) {
             window.scrollTo(0, 0);
-            navigate("/");
+            navigate("/ho-so");
           }
         });
         return;
@@ -171,12 +171,12 @@ const Login = () => {
     <>
       <div className=" w-full bg-[#33173C] flex-col items-center flex">
         <Header />
-        <div className=" flex flex-1 items-center justify-center bg-[#141414] mt-[100px]">
+        <div className=" flex w-[1140px] items-center justify-center bg-[#141414] mt-[100px]">
           <div
-            className={`container ${isSignUpActive ? "right-panel-active" : ""
+            className={`container flex flex-1 ${isSignUpActive ? "right-panel-active" : ""
               }`}
           >
-            <div className="form-container  sign-up-container ">
+            <div className="form-container sign-up-container ">
               <form
                 action="#"
                 className="bg-[#141414] flex items-center justify-center flex-col px-[50px] h-full text-center signup"

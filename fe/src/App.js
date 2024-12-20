@@ -7,13 +7,14 @@ import MovieShowtimes from "./Pages/Movie/MovieShowtimes";
 import BuyTickets from "./Pages/BuyTickets/BuyTickets";
 import Pay from "./Pages/Pay/Pay";
 import Login from "./Pages/User/login/Login";
+import Profile from "./Pages/User/profile/Profile";
 
 function App() {
   const handleContextMenu = (e) => {
     e.preventDefault();
   };
   return (
-    <div className="App" onContextMenu={handleContextMenu}>
+    <div className="App " onContextMenu={handleContextMenu}>
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -23,6 +24,7 @@ function App() {
           <Route path="/mua-ve/:id" element={<BuyTickets />} />
           <Route path="/thanh-toan/:id" element={<Pay />} />
           <Route path="/dang-nhap/" element={<Login />} />
+          <Route path="/ho-so/" element={<Profile />} />
         </Routes>
       </Router>
     </div>

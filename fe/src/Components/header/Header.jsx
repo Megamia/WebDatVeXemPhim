@@ -13,15 +13,14 @@ const Header = () => {
   const handleLogin = () => {
     navigate('/dang-nhap');
   }
-  const handleLogout = () => {
-    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    navigate("/");
+  const profile = () => {
+    navigate("/ho-so");
   };
   const toggleMenu = () => {
     setIsMenuOpen((prev) => !prev);
   };
   return (
-    <div className="bg-black bg-opacity-45 w-full flex justify-center pt-[20px] absolute z-20">
+    <div className="bg-black bg-opacity-45 w-full flex justify-center pt-[20px] absolute z-20 ">
       <div className="max-w-[1140px] w-full bg-transparent h-full flex justify-between items-end px-3">
         <div className="h-full w-[100px] flex justify-center items-center mb-2">
           <NavLink to="/">
@@ -92,7 +91,7 @@ const Header = () => {
           <div className="flex">
 
           {isLoggedIn ? (
-            <FaUserCheck className="text-white text-[25px] mx-2 cursor-pointer" onClick={handleLogout}/>
+            <FaUserCheck className="text-white text-[25px] mx-2 cursor-pointer" onClick={profile}/>
           ) : (
             <FaUser className="text-white text-[25px] mx-2 cursor-pointer" onClick={handleLogin} />
           )}
