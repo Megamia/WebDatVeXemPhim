@@ -66,25 +66,37 @@ router.get("/", authenticateToken, async (req, res) => {
   }
 });
 
+//update thêm
 router.post("/", authenticateToken, async (req, res) => {
   try {
-    const { username, fullname, email, password, phone } = req.body;
-    const { userId } = req.user;
+    const { username, email, password } = req.body;
+    const { userid } = req.user;
+    const query = `UPDATE Users 
+         SET username = @username,  email = @email, password = @password
+         WHERE userid = @userid`;
+    db.query(query, [username, email, password,userid], (err, results) => {
+      if (err) {
+        console.error("Database error:", err);
+        return res.status(500).json({ message: "Internal server error" });
+      }
 
-    const pool = await db.connect();
-    await pool
-      .request()
-      .input("username", sql.NVarChar, username)
-      .input("fullname", sql.NVarChar, fullname)
-      .input("email", sql.NVarChar, email)
-      .input("password", sql.NVarChar, password)
-      .input("phone", sql.NVarChar, phone)
-      .input("userid", sql.Int, userId)
-      .query(
-        `UPDATE Users 
-         SET username = @username, fullname = @fullname, email = @email, password = @password, phone = @phone 
-         WHERE userid = @userid`
-      );
+      if (results.length === 0) {
+        return res.status(404).json({ message: "Can't update" });
+      }
+    });
+    // await pool
+    //   .request()
+    //   .input("username", sql.NVarChar, username)
+    //   .input("fullname", sql.NVarChar, fullname)
+    //   .input("email", sql.NVarChar, email)
+    //   .input("password", sql.NVarChar, password)
+    //   .input("phone", sql.NVarChar, phone)
+    //   .input("userid", sql.Int, userId)
+    //   .query(
+    //     `UPDATE Users
+    //      SET username = @username, fullname = @fullname, email = @email, password = @password, phone = @phone
+    //      WHERE userid = @userid`
+    //   );
 
     res
       .status(200)
@@ -94,5 +106,6 @@ router.post("/", authenticateToken, async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 });
+//update thêm
 
 module.exports = router;

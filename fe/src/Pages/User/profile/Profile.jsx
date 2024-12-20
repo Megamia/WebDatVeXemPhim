@@ -19,6 +19,13 @@ const Profile = () => {
         navigate("/")
     }
 
+    const test = () => {
+        console.log("username: ", username, "\n",
+            "password: ", password, "\n",
+            "email: ", email, "\n",)
+    }
+
+
     useEffect(() => {
         fetchData();
     }, []);
@@ -62,6 +69,40 @@ const Profile = () => {
             });
         }
     };
+    const handleUpdate = () => {
+        const storedToken = Cookies.get("token");
+        axios
+          .post(
+            `${process.env.REACT_APP_API_URL}/api/ho-so`,
+            {
+              username: username,
+              email: email,
+              password: password,
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${storedToken}`,
+              },
+            }
+          )
+          .then((response) => {
+            console.log("Thông tin đã được cập nhật thành công:", response.data);
+            fetchData();
+            Swal.fire({
+              text: "Sửa thông tin thành công",
+              icon: "success"
+            });
+            // alert("Sửa thông tin thành công");
+          })
+          .catch((error) => {
+            console.error("Lỗi khi cập nhật thông tin:", error);
+            Swal.fire({
+              text: "Sửa thông tin thất bại",
+              icon: "error"
+            });
+            // alert("Sửa thông tin thất bại");
+          });
+      };
 
     return (
         <div className=" w-full min-h-screen bg-[#33173C] flex-col items-center flex">
@@ -81,21 +122,22 @@ const Profile = () => {
                         <span className='text-white text-[30px] w-[250px] text-left '>
                             Username:
                         </span>
-                        <Input placeholder='Tên tài khoản' value={username} />
+                        <Input placeholder='Tên tài khoản' value={username} onChange={(e) => setUsername(e.target.value)} />
                     </Flex>
                     <Flex align='center'>
                         <span className='text-white text-[30px] w-[250px] text-left '>
                             Password:
                         </span>
-                        <Input placeholder='Mật khẩu' value={password} />
+                        <Input placeholder='Mật khẩu' value={password} onChange={(e) => setPassword(e.target.value)} />
                     </Flex><Flex align='center'>
                         <span className='text-white text-[30px] w-[250px] text-left '>
                             Email:
                         </span>
-                        <Input placeholder='Email' value={email} />
+                        <Input placeholder='Email' value={email} onChange={(e) => setEmail(e.target.value)} />
                     </Flex>
-                    <Flex className="flex-1 justify-center items-center">
+                    <Flex gap={30} className="flex-1 justify-center items-center">
                         <button onClick={Logout} className=" text-white text-[30px] bg-green-500 p-[10px] rounded-lg hover:bg-red-500 ">Đăng xuất</button>
+                        <button onClick={handleUpdate} className=" text-white text-[30px] bg-green-500 p-[10px] rounded-lg hover:bg-red-500 ">Cập nhật</button>
                     </Flex>
                 </Flex>
             </Flex>
