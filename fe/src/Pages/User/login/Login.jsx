@@ -49,6 +49,18 @@ const Login = () => {
       theme: "colored",
     });
   };
+  const nguoidungtontai = () => {
+    toast.error("Email đã được đăng ký", {
+      position: "bottom-center",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+  };
 
 
 
@@ -57,8 +69,8 @@ const Login = () => {
   }, []);
 
   //LOGIN//
-  const handleUserChange = (event) => {
-    setUser(event.target.value);
+  const handleEmailChange = (event) => {
+    setEmail(event.target.value);
   };
 
   const handlePasswordChange = (event) => {
@@ -72,7 +84,7 @@ const Login = () => {
       const response = await axios.post(
         `${process.env.REACT_APP_API_URL}/api/dang-nhap`,
         {
-          username: User,
+          email: email,
           password: Password,
         }
       );
@@ -83,10 +95,7 @@ const Login = () => {
         d.setTime(d.getTime() + 1 * 60 * 60 * 1000);
         const expires = "expires=" + d.toUTCString();
         document.cookie = `token=${token}; ${expires}; path=/; secure;`;
-        // localStorage.setItem("isLoggedIn", "true");
-        // setIsLoggedIn(true);
-        // dangnhapthanhcong();
-        // await delay(2000);
+
         Swal.fire({
           title: "Đăng nhập thành công!",
           icon: "success",
@@ -95,6 +104,7 @@ const Login = () => {
         }).then((result) => {
           if (result.isConfirmed || result.isDismissed) {
             window.scrollTo(0, 0);
+            console.log(token)
             navigate("/ho-so");
           }
         });
@@ -144,13 +154,16 @@ const Login = () => {
           password,
         }
       );
-      if (response.status === 409) {
-        dangkythatbai();
-      }
-      else if (response.status === 200) {
+      if (response.data.status === 1) {
         console.log("Signup successful:", response.data.message);
         dangkythanhcong();
         handleLoginClick();
+      }
+      else if (response.data.status === 0) {
+        nguoidungtontai();
+      }
+      else {
+        dangkythatbai();
       }
     } catch (error) {
       console.error("Error signing up:", error);
@@ -275,9 +288,9 @@ const Login = () => {
                 </span>
                 <input
                   type="text"
-                  value={User}
-                  onChange={handleUserChange}
-                  placeholder="Tên đăng nhập"
+                  value={email}
+                  onChange={handleEmailChange}
+                  placeholder="Email"
                   className="inputUser border-gray-300 text-black"
                 />
                 <input

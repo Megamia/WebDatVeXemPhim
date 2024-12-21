@@ -4,13 +4,16 @@ import { NavLink } from "react-router-dom";
 import { FaStar, FaHeart } from "react-icons/fa";
 import { FiCalendar, FiThumbsUp, FiUserCheck } from "react-icons/fi";
 import { FaRegClock } from "react-icons/fa6";
+import { Rate } from 'antd';
 import VideoModal from "../trailer/VideoModal";
 
 const Moviedetail = ({ id }) => {
   const [movie, setMovie] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [videoId, setVideoId] = useState("");
-
+  const [check, setCheck] = useState(false);
+  const [value, setValue] = useState("3");
+  const desc = ['terrible', 'bad', 'normal', 'good', 'wonderful'];
   const openModal = (id) => {
     setVideoId(id);
     setIsModalOpen(true);
@@ -20,6 +23,12 @@ const Moviedetail = ({ id }) => {
     setIsModalOpen(false);
     setVideoId(""); // Reset videoId khi đóng modal
   };
+
+  const test = () => {
+    console.log("Test");
+    setCheck(check => !check);
+  }
+
   useEffect(() => {
     const fetchMovies = async () => {
       try {
@@ -63,18 +72,27 @@ const Moviedetail = ({ id }) => {
             <div className="w-full gap-3 flex">
               <div className="flex-1">
                 <div className="mb-3 flex gap-1">
-                  <NavLink
-                    href="#"
-                    className="flex gap-1 text-[13px] items-center justify-center text-[#283e59] py-1 px-2 rounded-[3px] bg-[#edf2f9] hover:bg-[#d0ddef]"
+                  <div
+                    onClick={test}
+                    className="flex gap-1 text-[13px] items-center justify-center cursor-pointer text-[#283e59] py-1 px-2 rounded-[3px] bg-[#edf2f9] hover:bg-[#d0ddef]"
                   >
-                    <FaHeart /> Thích
-                  </NavLink>
-                  <NavLink
+                    <FaHeart className={check ? "text-red-500" : ""} />
+                    <span className={check ? "text-red-500" : ""}>{check ? "Đã thích" : "Thích"}</span>
+                  </div>
+                  <div
                     href="#"
-                    className="flex gap-1 text-[13px] items-center justify-center text-[#283e59] py-1 px-2 rounded-[3px] bg-[#edf2f9] hover:bg-[#d0ddef]"
+                    className="flex gap-1 text-[13px] items-center justify-center cursor-pointer text-[#283e59] py-1 px-2 rounded-[3px] bg-[#edf2f9] hover:bg-[#d0ddef]"
                   >
                     <FaStar /> Đánh giá
-                  </NavLink>
+                  </div>
+                  <div>
+                    {check && (
+                      <>
+                        <Rate value={value} tooltips={desc} onChange={setValue} />
+                        <span className="ant-rate-text">{desc[value - 1]}</span>
+                      </>
+                    )}
+                  </div>
                   <NavLink
                     to={`/trailer/${movie.id_phim}`}
                     onClick={(e) => {

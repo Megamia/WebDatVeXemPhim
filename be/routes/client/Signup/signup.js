@@ -16,7 +16,7 @@ router.post("/", async (req, res) => {
     });
 
     if (existingUser) {
-      return res.status(409).json({ status: 0, message: "Tài khoản người dùng đã tồn tại." });
+      return res.json({ status: 0, message: "Tài khoản người dùng đã tồn tại." });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -29,7 +29,7 @@ router.post("/", async (req, res) => {
       });
     });
 
-    res.status(200).json({
+    res.json({
       status: 1,
       state: true,
       message: "Đăng ký thành công.",

@@ -34,11 +34,10 @@ const authenticateToken = (req, res, next) => {
 
 router.get("/", authenticateToken, async (req, res) => {
   try {
-    const userInfo = req.user;
-    const { username } = userInfo;
-    const query = "SELECT * FROM Users WHERE username = ?";
+    const { userId } = req.user;
+    const query = "SELECT * FROM Users WHERE userid = ?";
 
-    db.query(query, [username], (err, results) => {
+    db.query(query, [userId], (err, results) => {
       if (err) {
         console.error("Database error:", err);
         return res.status(500).json({ message: "Internal server error" });
@@ -47,8 +46,9 @@ router.get("/", authenticateToken, async (req, res) => {
       if (results.length === 0) {
         return res.status(404).json({ message: "User not found" });
       }
+
       const userInfoFromDB = results[0];
-      const isAdmin = userInfoFromDB["userid"];
+      const isAdmin = userInfoFromDB["isAdmin"];
 
       const response = {
         message: isAdmin === 1 ? "User is Admin" : "User isn't Admin",
@@ -70,42 +70,71 @@ router.get("/", authenticateToken, async (req, res) => {
 router.post("/", authenticateToken, async (req, res) => {
   try {
     const { username, email, password } = req.body;
-    const { userid } = req.user;
-    const query = `UPDATE Users 
-         SET username = @username,  email = @email, password = @password
-         WHERE userid = @userid`;
-    db.query(query, [username, email, password,userid], (err, results) => {
+    const { userId } = req.user;
+
+    if (!username || !email || !password || !userId) {
+      return res.status(400).json({ message: "Missing required fields" });
+    }
+
+    // Kiểm tra xem người dùng có tồn tại trong cơ sở dữ liệu không
+    const checkUserExistsQuery = `
+      SELECT * FROM Users WHERE userid = ?
+    `;
+    db.query(checkUserExistsQuery, [userId], (err, userResults) => {
       if (err) {
         console.error("Database error:", err);
         return res.status(500).json({ message: "Internal server error" });
       }
 
-      if (results.length === 0) {
-        return res.status(404).json({ message: "Can't update" });
+      if (userResults.length === 0) {
+        return res.status(404).json({ message: "User not found" });
       }
-    });
-    // await pool
-    //   .request()
-    //   .input("username", sql.NVarChar, username)
-    //   .input("fullname", sql.NVarChar, fullname)
-    //   .input("email", sql.NVarChar, email)
-    //   .input("password", sql.NVarChar, password)
-    //   .input("phone", sql.NVarChar, phone)
-    //   .input("userid", sql.Int, userId)
-    //   .query(
-    //     `UPDATE Users
-    //      SET username = @username, fullname = @fullname, email = @email, password = @password, phone = @phone
-    //      WHERE userid = @userid`
-    //   );
 
-    res
-      .status(200)
-      .json({ message: "User information has been updated successfully" });
+      // Tiến hành cập nhật thông tin người dùng
+      const query = `
+        UPDATE Users 
+        SET username = ?, email = ?, password = ? 
+        WHERE userid = ?
+      `;
+
+      db.query(query, [username, email, password, userId], (err, results) => {
+        if (err) {
+          console.error("Database error:", err);
+          return res.status(500).json({ message: "Internal server error" });
+        }
+
+        // Kiểm tra số dòng bị ảnh hưởng và thay đổi thực sự
+        if (results.changedRows > 0 || results.affectedRows > 0) {
+          return res.status(200).json({
+            message: "User information has been updated successfully",
+          });
+        } else {
+          // Nếu không có thay đổi nhưng dữ liệu đã tồn tại
+          return res.status(400).json({
+            message: "No changes detected in user information",
+          });
+        }
+      });
+    });
   } catch (error) {
     console.error("Error:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 });
+
+// await pool
+//   .request()
+//   .input("username", sql.NVarChar, username)
+//   .input("fullname", sql.NVarChar, fullname)
+//   .input("email", sql.NVarChar, email)
+//   .input("password", sql.NVarChar, password)
+//   .input("phone", sql.NVarChar, phone)
+//   .input("userid", sql.Int, userId)
+//   .query(
+//     `UPDATE Users
+//      SET username = @username, fullname = @fullname, email = @email, password = @password, phone = @phone
+//      WHERE userid = @userid`
+//   );
 //update thêm
 
 module.exports = router;

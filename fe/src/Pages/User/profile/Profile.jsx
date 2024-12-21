@@ -11,20 +11,15 @@ const Profile = () => {
     const navigate = useNavigate();
     const [user, setUser] = useState("");
     const [username, setUsername] = useState("");
+    const [editUsername, setEditUsername] = useState("");
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
+    const [editEmail, setEditEmail] = useState("");
 
     const Logout = () => {
         document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         navigate("/")
     }
-
-    const test = () => {
-        console.log("username: ", username, "\n",
-            "password: ", password, "\n",
-            "email: ", email, "\n",)
-    }
-
 
     useEffect(() => {
         fetchData();
@@ -54,12 +49,11 @@ const Profile = () => {
             setUsername(userInfo.username);
             setEmail(userInfo.email);
             setPassword(userInfo.password);
-            // console.log("userid: ", userInfo.userid, "\n",
-            //     "username: ", username, "\n",
-            //     "password: ", password, "\n",
-            //     "email: ", email, "\n",
-            //     "role: ", userInfo.isAdmin, "\n"
-            // )
+            if (editUsername.length === 0 && editEmail.length === 0) {
+                setEditUsername(userInfo.username);
+                setEditEmail(userInfo.email);
+            }
+            
 
         } catch (error) {
             console.error("Error fetching user profile:", error);
@@ -71,38 +65,41 @@ const Profile = () => {
     };
     const handleUpdate = () => {
         const storedToken = Cookies.get("token");
+    
         axios
-          .post(
-            `${process.env.REACT_APP_API_URL}/api/ho-so`,
-            {
-              username: username,
-              email: email,
-              password: password,
-            },
-            {
-              headers: {
-                Authorization: `Bearer ${storedToken}`,
-              },
-            }
-          )
-          .then((response) => {
-            console.log("Thông tin đã được cập nhật thành công:", response.data);
-            fetchData();
-            Swal.fire({
-              text: "Sửa thông tin thành công",
-              icon: "success"
+            .post(
+                `${process.env.REACT_APP_API_URL}/api/ho-so`,
+                {
+                    username: username,
+                    email: email,
+                    password: password,
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${storedToken}`,
+                    },
+                }
+            )
+            .then((response) => {
+                setEditUsername(username);
+                setEditEmail(email);
+                fetchData();
+                Swal.fire({
+                    text: "Sửa thông tin thành công",
+                    icon: "success",
+                });
+                // alert("Sửa thông tin thành công");
+            })
+            .catch((error) => {
+                console.error("Lỗi khi cập nhật thông tin:", error);
+                Swal.fire({
+                    text: "Sửa thông tin thất bại",
+                    icon: "error",
+                });
+                // alert("Sửa thông tin thất bại");
             });
-            // alert("Sửa thông tin thành công");
-          })
-          .catch((error) => {
-            console.error("Lỗi khi cập nhật thông tin:", error);
-            Swal.fire({
-              text: "Sửa thông tin thất bại",
-              icon: "error"
-            });
-            // alert("Sửa thông tin thất bại");
-          });
-      };
+    };
+    
 
     return (
         <div className=" w-full min-h-screen bg-[#33173C] flex-col items-center flex">
@@ -114,8 +111,8 @@ const Profile = () => {
                         alt="?"
                         className="w-[50%]"
                     />
-                    <span className='text-[25px] text-white'>Username: {username}</span>
-                    <span className='text-[25px] text-white'>Email: {email}</span>
+                    <span className='text-[25px] text-white'>Username: {editUsername}</span>
+                    <span className='text-[25px] text-white'>Email: {editEmail}</span>
                 </Flex>
                 <Flex vertical className='flex-1 p-[20px]'>
                     <Flex align='center'>
@@ -128,7 +125,7 @@ const Profile = () => {
                         <span className='text-white text-[30px] w-[250px] text-left '>
                             Password:
                         </span>
-                        <Input placeholder='Mật khẩu' value={password} onChange={(e) => setPassword(e.target.value)} />
+                        <Input type="password" placeholder='Mật khẩu' value={password} onChange={(e) => setPassword(e.target.value)} />
                     </Flex><Flex align='center'>
                         <span className='text-white text-[30px] w-[250px] text-left '>
                             Email:
