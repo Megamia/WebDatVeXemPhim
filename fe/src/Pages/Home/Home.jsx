@@ -2,7 +2,6 @@ import React from "react";
 import Header from "../../Components/header/Header";
 import Footer from "../../Components/footer/Footer";
 import "./Home.css";
-import MovieList from "../Admin/Movie/MovieList";
 import Slider1 from "../../Components/slider/Slider1";
 import Slider2 from "../../Components/slider/Slider2";
 
@@ -14,9 +13,6 @@ const Home = () => {
         <Slider1 />
         <Slider2 id={1} />
         <Slider2 id={2} />
-        <div className="bg-[#33173C] w-full h-[20px]" />
-        <MovieList />
-        <div className="bg-[#33173C] w-full h-[20px]" />
       </div>
       <Footer />
     </div>

@@ -1,23 +1,33 @@
-import React, { useState  } from "react";
+import React, { useState } from "react";
 import { FiSearch } from "react-icons/fi";
-import { NavLink } from "react-router-dom";
-import { FaUser, FaAngleDown } from "react-icons/fa";
+import { NavLink, useNavigate } from "react-router-dom";
+import { FaUser, FaAngleDown, FaUserCheck } from "react-icons/fa";
 import { AiOutlineQuestionCircle } from "react-icons/ai";
 import { IoMdMenu } from "react-icons/io";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  const isLoggedIn = document.cookie.includes("token=");
+  const navigate = useNavigate();
+  const handleLogin = () => {
+    navigate('/dang-nhap');
+  }
+  const profile = () => {
+    navigate("/ho-so");
+  };
   const toggleMenu = () => {
     setIsMenuOpen((prev) => !prev);
   };
   return (
-    <div className="bg-black bg-opacity-45 w-full flex justify-center pt-[20px] absolute z-20">
+    <div className="bg-black bg-opacity-45 w-full flex justify-center pt-[20px] absolute z-20 ">
       <div className="max-w-[1140px] w-full bg-transparent h-full flex justify-between items-end px-3">
         <div className="h-full w-[100px] flex justify-center items-center mb-2">
-          <img className="w-[80px]" src="../../img/logowebsite.png" alt="logo" />
+          <NavLink to="/">
+            <img className="w-[80px]" src="../../img/logowebsite.png" alt="logo" />
+          </NavLink>
         </div>
-        <div className="flex gap-5 text-[20px] justify-center items-center text-white">
+        <div className="flex gap-5 text-[20px] justify-center  text-white">
           <div className="relative group flex items-center">
             <button className="mb-3 flex items-center gap-1">
               <FiSearch className="absolute top-[5px] left-[-22px] group-focus-within:translate-x-[29px] group-focus-within:top-[7px] group-focus-within:text-black text-[20px] text-white" />
@@ -38,9 +48,8 @@ const Header = () => {
               <IoMdMenu className="text-[35px]" />
             </button>
             <div
-              className={`${
-                isMenuOpen ? "block" : "hidden"
-              } absolute lg:relative right-9 lg:right-0 lg:p-0 p-3 lg:bg-transparent bg-black lg:top-0 top-[101px] gap-5 lg:flex`}
+              className={`${isMenuOpen ? "block" : "hidden"
+                } absolute lg:relative right-9 lg:right-0 lg:p-0 p-3 lg:bg-transparent bg-black lg:top-0 top-[101px] gap-5 lg:flex`}
             >
               <NavLink className="lg:mb-3 mb-0 whitespace-nowrap" to="#">
                 Lịch chiếu
@@ -79,9 +88,14 @@ const Header = () => {
               </NavLink>
             </div>
           </div>
-          <NavLink className="mb-3" to="#">
-            <FaUser className="text-white text-[25px] mx-2" />
-          </NavLink>
+          <div className="flex">
+
+          {isLoggedIn ? (
+            <FaUserCheck className="text-white text-[25px] mx-2 cursor-pointer" onClick={profile}/>
+          ) : (
+            <FaUser className="text-white text-[25px] mx-2 cursor-pointer" onClick={handleLogin} />
+          )}
+          </div>
         </div>
       </div>
     </div>

@@ -32,6 +32,10 @@ const dotuoiRoutes = require("./routes/admin/AgeLimit");
 const artistRoutes = require("./routes/admin/artistNmovie");
 const suatchieuadminRoutes = require("./routes/admin/movieschedule");
 const { checkAndUpdateSuatChieu } = require("./routes/admin/checktinhtrang");
+const dangnhapRoutes = require("./routes/client/Login/login");
+const dangkyRoutes = require("./routes/client/Signup/signup");
+const hosoRoutes = require("./routes/client/Profile/profile");
+const yeuthichRoutes = require("./routes/client/Like/like");
 
 app.use("/api/users", userRoutes);
 app.use("/api/movies", movieRoutes);
@@ -44,10 +48,13 @@ app.use("/api/nghe-si",nghesiRoutes);
 app.use("/api/admin/do-tuoi",dotuoiRoutes);
 app.use("/api/admin/artist",artistRoutes);
 app.use("/api/admin/suat-chieu",suatchieuadminRoutes);
-
 checkAndUpdateSuatChieu();
 setInterval(checkAndUpdateSuatChieu, 10 * 60 * 1000);
-
+app.use("/api/dang-nhap", dangnhapRoutes);
+app.use("/api/dang-ky", dangkyRoutes);
+app.use("/api/ho-so", hosoRoutes);
+app.use("/api/yeu-thich", yeuthichRoutes);
+// Chạy server
 app.listen(port, () => {
   console.log(`Server đang chạy tại http://localhost:${port}`);
 });
