@@ -8,6 +8,7 @@ import BuyTickets from "./Pages/BuyTickets/BuyTickets";
 import Pay from "./Pages/Pay/Pay";
 import Login from "./Pages/User/login/Login";
 import Profile from "./Pages/User/profile/Profile";
+// import DetailProfile from "./Pages/User/profile/Swap/DetailProfile";
 
 function App() {
   const handleContextMenu = (e) => {
@@ -25,6 +26,7 @@ function App() {
           <Route path="/thanh-toan/:id" element={<Pay />} />
           <Route path="/dang-nhap/" element={<Login />} />
           <Route path="/ho-so/" element={<Profile />} />
+          {/* <Route path="/test1/" element={<Test1 />} /> */}
         </Routes>
       </Router>
     </div>

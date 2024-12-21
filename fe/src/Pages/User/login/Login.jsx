@@ -79,11 +79,6 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-console.log('====================================');
-console.log(password
-  
-);
-console.log('====================================');
     try {
       const response = await axios.post(
         `${process.env.REACT_APP_API_URL}/api/dang-nhap`,
@@ -108,7 +103,6 @@ console.log('====================================');
         }).then((result) => {
           if (result.isConfirmed || result.isDismissed) {
             window.scrollTo(0, 0);
-            console.log(token)
             navigate("/ho-so");
           }
         });
@@ -159,7 +153,6 @@ console.log('====================================');
         }
       );
       if (response.data.status === 1) {
-        console.log("Signup successful:", response.data.message);
         dangkythanhcong();
         handleLoginClick();
       }
