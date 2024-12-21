@@ -12,7 +12,7 @@ const Profile = () => {
     const [user, setUser] = useState("");
     const [username, setUsername] = useState("");
     const [editUsername, setEditUsername] = useState("");
-    const [password, setPassword] = useState("");
+    const [newPassword, setNewPassword] = useState("");
     const [email, setEmail] = useState("");
     const [editEmail, setEditEmail] = useState("");
 
@@ -48,7 +48,6 @@ const Profile = () => {
             setUser(userInfo);
             setUsername(userInfo.username);
             setEmail(userInfo.email);
-            setPassword(userInfo.password);
             if (editUsername.length === 0 && editEmail.length === 0) {
                 setEditUsername(userInfo.username);
                 setEditEmail(userInfo.email);
@@ -72,7 +71,7 @@ const Profile = () => {
                 {
                     username: username,
                     email: email,
-                    password: password,
+                    password: newPassword,
                 },
                 {
                     headers: {
@@ -116,18 +115,18 @@ const Profile = () => {
                 </Flex>
                 <Flex vertical className='flex-1 p-[20px]'>
                     <Flex align='center'>
-                        <span className='text-white text-[30px] w-[250px] text-left '>
+                        <span className='text-white text-[30px] w-[300px] text-left '>
                             Username:
                         </span>
                         <Input placeholder='Tên tài khoản' value={username} onChange={(e) => setUsername(e.target.value)} />
                     </Flex>
                     <Flex align='center'>
-                        <span className='text-white text-[30px] w-[250px] text-left '>
-                            Password:
+                        <span className='text-white text-[30px] w-[300px] text-left '>
+                            New password:
                         </span>
-                        <Input type="password" placeholder='Mật khẩu' value={password} onChange={(e) => setPassword(e.target.value)} />
+                        <Input type="password" placeholder='Mật khẩu mới' value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
                     </Flex><Flex align='center'>
-                        <span className='text-white text-[30px] w-[250px] text-left '>
+                        <span className='text-white text-[30px] w-[300px] text-left '>
                             Email:
                         </span>
                         <Input placeholder='Email' value={email} onChange={(e) => setEmail(e.target.value)} />
