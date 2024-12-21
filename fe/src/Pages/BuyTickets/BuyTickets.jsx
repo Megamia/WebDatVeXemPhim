@@ -36,8 +36,10 @@ const BuyTickets = () => {
     }
     navigate(`/thanh-toan/${code}`, {
       state: {
+        code: code,
         seats: selectedSeats,
         totalPrice: totalPrice,
+        suatchieu: suatchieu.id,
       },
     });
   };
@@ -152,17 +154,35 @@ const BuyTickets = () => {
                       })}
                     </span>
                   </p>
-                  <p className="text-[15px] truncate">
+                  <p className="text-[15px]">
                     Phòng chiếu{" "}
                     <span className="font-bold">{suatchieu.ten_phong}</span>
-                    {" - "}Ghế <span>...</span>
+                    {" - "}Ghế{" "}
+                    <div className=" inline-table break-words whitespace-normal max-w-full">
+                      {selectedSeats.length === 0 ? (
+                        <span>...</span>
+                      ) : (
+                        chongoi
+                          .filter((seat) =>
+                            selectedSeats.some(
+                              (selected) => selected === seat.id_ghe
+                            )
+                          )
+                          .map((seat, index, array) => (
+                            <span key={seat.id_ghe}>
+                              <span className="font-bold">{seat.ten_ghe}</span>
+                              {index < array.length - 1 ? ", " : ""}
+                            </span>
+                          ))
+                      )}
+                    </div>
                   </p>
                 </div>
                 <div className="p-6 bg-white rounded-md text-left mb-6">
                   <h6 className="text-[10px] font-bold text-[#95aac9]">
                     TỔNG ĐƠN HÀNG
                   </h6>
-                  <span>{totalPrice} ₫</span>
+                  <span>{totalPrice} $</span>
                 </div>
                 <div className="flex gap-5">
                   <div className="flex-1 p-2 bg-gray-800 rounded-md text-white">

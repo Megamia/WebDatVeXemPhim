@@ -2,11 +2,20 @@ const express = require("express");
 const router = express.Router();
 const db = require("../../config/db");
 
-// Lấy danh sách ghế và thông tin suất chiếu theo id_suat_chieu
+
+router.get("/", (req, res) => {
+  db.query("SELECT * FROM suat_chieu", (err, results) => {
+    if (err) {
+      console.error("Lỗi khi lấy danh sách:", err);
+      return res.status(500).json({ message: "Lỗi khi lấy dữ liệu" });
+    }
+    res.json(results);
+  });
+});
+
 router.get("/:id_suat_chieu", async (req, res) => {
   const { id_suat_chieu } = req.params;
 
-  // Truy vấn lấy thông tin ghế và trạng thái mua cùng thông tin suất chiếu
   const query = `
     SELECT
       c.id AS id_ghe, 
@@ -48,6 +57,7 @@ router.get("/:id_suat_chieu", async (req, res) => {
 
     // Thêm thông tin suất chiếu
     const suatChieuInfo = {
+      id: id_suat_chieu || "",
       ten_phong: results[0]?.ten_phong || "",
       ten_phim: results[0]?.ten_phim || "",
       gia: results[0]?.gia || 0,

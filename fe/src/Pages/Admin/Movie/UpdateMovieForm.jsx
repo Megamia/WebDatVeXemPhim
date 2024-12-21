@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-const UpdateMovieForm = ({ movieId }) => {
+const UpdateMovieForm = ({ movieId, onUpdateSuccess }) => {
   const [movie, setMovie] = useState({
     ten_phim: "",
     mo_ta: "",
@@ -90,6 +90,7 @@ const UpdateMovieForm = ({ movieId }) => {
         }
       );
       alert("Phim đã được cập nhật!");
+      onUpdateSuccess();
     } catch (error) {
       console.error("Lỗi khi cập nhật phim:", error);
       alert("Có lỗi xảy ra khi cập nhật phim.");
@@ -98,6 +99,7 @@ const UpdateMovieForm = ({ movieId }) => {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-2 p-2">
+      <label className="block text-gray-700 text-sm font-bold">Tên Phim</label>
       <input
         type="text"
         name="ten_phim"
@@ -105,21 +107,31 @@ const UpdateMovieForm = ({ movieId }) => {
         onChange={handleChange}
         placeholder="Tên phim"
         required
+        className="w-full px-4 py-2 border border-gray-300 rounded-md mb-2"
       />
+      <label className="block text-gray-700 text-sm font-bold">Mô Tả</label>
       <textarea
         name="mo_ta"
         value={movie.mo_ta || ""} // Đảm bảo không bị undefined
         onChange={handleChange}
         placeholder="Mô tả"
         required
+        className="w-full px-4 py-2 border border-gray-300 rounded-md mb-2"
       />
+      <label className="block text-gray-700 text-sm font-bold">
+        Ngày khởi chiếu
+      </label>
       <input
         type="date"
         name="khoi_chieu"
         value={movie.khoi_chieu ? movie.khoi_chieu.split("T")[0] : ""} // Chỉ lấy phần ngày
         onChange={handleChange}
         required
+        className="w-full px-4 py-2 border border-gray-300 rounded-md mb-2"
       />
+      <label className="block text-gray-700 text-sm font-bold">
+        Thời Lượng (Phút)
+      </label>
       <input
         type="number"
         name="thoi_luong"
@@ -127,7 +139,9 @@ const UpdateMovieForm = ({ movieId }) => {
         onChange={handleChange}
         placeholder="Thời lượng"
         required
+        className="w-full px-4 py-2 border border-gray-300 rounded-md mb-2"
       />
+      <label className="block text-gray-700 text-sm font-bold">Trailer</label>
       <input
         type="text"
         name="trailer"
@@ -135,7 +149,9 @@ const UpdateMovieForm = ({ movieId }) => {
         onChange={handleChange}
         placeholder="Trailer"
         required
+        className="w-full px-4 py-2 border border-gray-300 rounded-md mb-2"
       />
+      <label className="block text-gray-700 text-sm font-bold">Tên Phụ</label>
       <input
         type="text"
         name="ten_phu"
@@ -143,7 +159,11 @@ const UpdateMovieForm = ({ movieId }) => {
         onChange={handleChange}
         placeholder="Tên phụ"
         required
+        className="w-full px-4 py-2 border border-gray-300 rounded-md mb-2"
       />
+      <label className="block text-gray-700 text-sm font-bold">
+        Giới Hạn Độ Tuổi
+      </label>
       <input
         type="number"
         name="gioi_han_do_tuoi"
@@ -151,21 +171,25 @@ const UpdateMovieForm = ({ movieId }) => {
         onChange={handleChange}
         placeholder="Giới hạn độ tuổi"
         required
+        className="w-full px-4 py-2 border border-gray-300 rounded-md mb-2"
       />
 
       {/* Hiển thị ảnh cũ hoặc ảnh mới nếu có */}
       {movie.poster && (
         <div>
-          <h3>Poster Hiện Tại:</h3>
+          <label className="block text-gray-700 text-sm font-bold mb-2">
+            Poster
+          </label>
           <img
             src={
               movie.posterPreview ||
               `${process.env.REACT_APP_API_URL}${movie.poster}`
             } // Hiển thị ảnh mới nếu có, nếu không thì hiển thị ảnh cũ
             alt="Poster"
-            width="200"
+            width="150"
+            className="rounded-sm"
           />
-          <p>
+          <p className="w-full px-4 py-2 border border-gray-300 rounded-md mt-2">
             {typeof movie.poster === "string"
               ? movie.poster.split("/").pop() // Nếu poster là chuỗi, lấy tên file từ đường dẫn
               : movie.poster.name}{" "}
@@ -184,7 +208,7 @@ const UpdateMovieForm = ({ movieId }) => {
       />
       <label
         htmlFor="poster"
-        className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer w-[200px] hover:bg-blue-600"
+        className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer w-[200px] hover:bg-blue-600 mb-2"
       >
         Chọn file
       </label>
@@ -192,7 +216,9 @@ const UpdateMovieForm = ({ movieId }) => {
       {/* Hiển thị ảnh nền cũ hoặc ảnh mới nếu có */}
       {movie.background && (
         <div>
-          <h3>Ảnh Nền Hiện Tại:</h3>
+          <label className="block text-gray-700 text-sm font-bold mb-2">
+            Background
+          </label>
           <img
             src={
               movie.backgroundPreview ||
@@ -200,8 +226,9 @@ const UpdateMovieForm = ({ movieId }) => {
             } // Hiển thị ảnh mới nếu có, nếu không thì hiển thị ảnh cũ
             alt="Background"
             width="200"
+            className="rounded-sm"
           />
-          <p>
+          <p className="w-full px-4 py-2 border border-gray-300 rounded-md mt-2">
             {typeof movie.background === "string"
               ? movie.background.split("/").pop() // Nếu background là chuỗi, lấy tên file từ đường dẫn
               : movie.background.name}{" "}
@@ -224,8 +251,14 @@ const UpdateMovieForm = ({ movieId }) => {
       >
         Chọn file
       </label>
-
-      <button type="submit">Cập nhật phim</button>
+      <div className="w-full flex justify-center mt-3">
+        <button
+          type="submit"
+          className="bg-blue-500 text-white font-bold py-2 px-4 rounded"
+        >
+          Cập nhật phim
+        </button>
+      </div>
     </form>
   );
 };

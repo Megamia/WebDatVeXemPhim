@@ -3,9 +3,8 @@ import Header from "../../../Components/header/Header";
 import Footer from "../../../Components/footer/Footer";
 import AdminMenu from "../../../Components/menu/AdminMenu";
 import axios from "axios";
-import AddMovieForm from "./AddMovieForm";
-import UpdateMovieForm from "./UpdateMovieForm";
-import ArtistTable from "../Artist/ArtistTable";
+import MovieScheduleADD from "./MovieScheduleADD";
+import MovieScheduleEdit from "./MovieScheduleEdit";
 
 import {
   Form,
@@ -15,6 +14,7 @@ import {
   Typography,
   Button,
   Modal,
+  Select,
   Flex,
 } from "antd";
 import {
@@ -24,7 +24,9 @@ import {
 } from "@ant-design/icons";
 import "./../Admin.css";
 
-const MovieList = () => {
+const { Option } = Select;
+
+const MovieSchedule = () => {
   const [form] = Form.useForm();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -32,9 +34,14 @@ const MovieList = () => {
   const [isModalEDITVisible, setIsModalEDITVisible] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [selected, setSelected] = useState(0);
+  const [statusFilter, setStatusFilter] = useState(null); // Trạng thái lọc
 
   const handleSearchChange = (e) => {
     setSearchText(e.target.value);
+  };
+
+  const handleStatusFilterChange = (value) => {
+    setStatusFilter(value); // Cập nhật trạng thái lọc
   };
 
   const handleCloseModal = () => {
@@ -46,11 +53,11 @@ const MovieList = () => {
   const fetchMovie = async () => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/movies`
+        `${process.env.REACT_APP_API_URL}/api/admin/suat-chieu`
       );
       const formattedData = response.data.map((item, index) => ({
         ...item,
-        key: item.id_phim || index.toString(),
+        key: item.id || index.toString(),
       }));
       setData(formattedData);
       setLoading(false);
@@ -86,50 +93,83 @@ const MovieList = () => {
     }
   };
 
-  const filteredData = data.filter((item) =>
-    item.ten_phim.toLowerCase().includes(searchText.toLowerCase())
-  );
+  const filteredData = data.filter((item) => {
+    const statusMatch =
+      statusFilter === null || item.tinh_trang === statusFilter;
+
+    const localTime = item.thoi_gian
+      ? new Date(item.thoi_gian || "").toLocaleString("vi-VN", {
+          timeZone: "Asia/Ho_Chi_Minh",
+          hour: "2-digit",
+          minute: "2-digit",
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+        })
+      : "";
+
+    const phimMatch = (item.ten_phim ? String(item.ten_phim) : "")
+      .toLowerCase()
+      .includes(searchText.toLowerCase());
+
+    const phongMatch = (item.ten_phong ? String(item.ten_phong) : "")
+      .toLowerCase()
+      .includes(searchText.toLowerCase());
+
+    const timeMatch = localTime
+      .toLowerCase()
+      .includes(searchText.toLowerCase());
+
+    return (phimMatch || timeMatch || phongMatch) && statusMatch; // Điều kiện lọc theo trạng thái và tìm kiếm
+  });
 
   const columns = [
     {
-      title: "Poter",
+      title: "Tên Phim",
+      dataIndex: "ten_phim",
+      width: "20%",
+    },
+    {
+      title: "Tên Phòng",
+      dataIndex: "ten_phong",
+      width: "5%",
+    },
+    {
+      title: "Trạng Thái",
+      dataIndex: "tinh_trang",
       width: "10%",
       render: (_, record) => {
-        return (
-          <div className="inline-block">
-            <img
-              src={`${process.env.REACT_APP_API_URL}${record.poster}`}
-              alt={record.ten_phim}
-              className="w-full object-cover rounded-md border"
-            />
-          </div>
-        );
+        switch (record.tinh_trang) {
+          case 0:
+            return <span className="text-gray-400 font-bold">Chưa Chiếu</span>;
+          case 1:
+            return <span className="text-green-400 font-bold">Đang Chiếu</span>;
+          case 2:
+            return <span className="text-red-400 font-bold">Đã Kết Thúc</span>;
+          default:
+            return <span>Không xác định</span>;
+        }
       },
     },
     {
-      title: "Tên Phim",
-      dataIndex: "ten_phim",
-      width: "25%",
+      title: "Giá Vé",
+      dataIndex: "gia",
+      width: "5%",
+      render: (_, record) => {
+        return <span>{record.gia} $</span>;
+      },
     },
     {
-      title: "Tên Phụ",
-      dataIndex: "ten_phu",
-      width: "25%",
-    },
-    {
-      title: "Thời Lượng (Phút)",
-      dataIndex: "thoi_luong",
-      width: "12%",
-    },
-    {
-      title: "Khởi Chiếu",
-      dataIndex: "khoi_chieu",
-      width: "10%",
+      title: "Thời Gian",
+      dataIndex: "thoi_gian",
+      width: "5%",
       render: (_, record) => {
         return (
           <span>
-            {new Date(record.khoi_chieu || "").toLocaleString("vi-VN", {
+            {new Date(record.thoi_gian || "").toLocaleString("vi-VN", {
               timeZone: "Asia/Ho_Chi_Minh",
+              hour: "2-digit",
+              minute: "2-digit",
               day: "2-digit",
               month: "2-digit",
               year: "numeric",
@@ -141,7 +181,7 @@ const MovieList = () => {
     {
       title: "Action",
       dataIndex: "operation",
-      width: "15%",
+      width: "10%",
       render: (_, record) => {
         return (
           <div className="flex flex-col gap-1">
@@ -149,7 +189,7 @@ const MovieList = () => {
               <Typography.Link
                 onClick={() => {
                   setIsModalEDITVisible(true);
-                  setSelected(record.id_phim);
+                  setSelected(record.id);
                 }}
                 style={{ marginRight: 8 }}
               >
@@ -188,7 +228,7 @@ const MovieList = () => {
             onCancel={() => setIsModalADDVisible(false)}
             footer={null}
           >
-            <AddMovieForm onAddSuccess={handleCloseModal} />
+            <MovieScheduleADD onAddSuccess={handleCloseModal} />
           </Modal>
           <Modal
             title="Chỉnh sửa phim"
@@ -196,40 +236,50 @@ const MovieList = () => {
             onCancel={() => setIsModalEDITVisible(false)}
             footer={null}
           >
-            <UpdateMovieForm
-              movieId={selected}
+            <MovieScheduleEdit
+              Id={selected}
               onUpdateSuccess={handleCloseModal}
             />
           </Modal>
           <Form form={form} component={false}>
             <Table
-              expandable={{
-                expandedRowRender: (record) => (
-                  <ArtistTable movieId={record.id_phim} />
-                ),
-                rowExpandable: (record) => !!record.id_phim, 
-              }}
               bordered={true}
               loading={loading}
               title={() => (
-                <div className="text-lg font-bold text-center relative">
-                  <Button
-                    type="primary"
-                    className="absolute left-0"
-                    onClick={() => setIsModalADDVisible(true)}
-                  >
-                    Thêm mới
-                  </Button>
-                  Danh sách phim
-                  <Flex gap={10} className="absolute right-0 top-0">
-                    <SearchOutlined className="text-[20px]" />
-                    <Input
-                      placeholder="Tìm kiếm phim..."
-                      value={searchText}
-                      onChange={handleSearchChange}
-                      className="w-[300px]"
-                    />
-                  </Flex>
+                <div>
+                  <span className="text-[25px] font-bold">
+                    Danh sách suất phim
+                  </span>
+                  <div className="text-lg font-bold text-center relative mt-2">
+                    <Button
+                      type="primary"
+                      className="absolute left-0"
+                      onClick={() => setIsModalADDVisible(true)}
+                    >
+                      Thêm mới
+                    </Button>
+                    .
+                    <Flex gap={10} className="absolute right-0 top-0">
+                      <SearchOutlined className="text-[20px]" />
+                      <Input
+                        placeholder="Tìm kiếm phim..."
+                        value={searchText}
+                        onChange={handleSearchChange}
+                        className="w-[300px]"
+                      />
+                      <Select
+                        value={statusFilter}
+                        onChange={handleStatusFilterChange}
+                        className="w-[150px]"
+                        placeholder="Lọc trạng thái"
+                      >
+                        <Option value={null}>Tất cả</Option>
+                        <Option value={0}>Chưa Chiếu</Option>
+                        <Option value={1}>Đang Chiếu</Option>
+                        <Option value={2}>Đã Kết Thúc</Option>
+                      </Select>
+                    </Flex>
+                  </div>
                 </div>
               )}
               dataSource={filteredData}
@@ -244,4 +294,4 @@ const MovieList = () => {
   );
 };
 
-export default MovieList;
+export default MovieSchedule;
