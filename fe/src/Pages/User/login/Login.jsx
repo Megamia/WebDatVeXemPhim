@@ -89,7 +89,7 @@ const Login = () => {
         }
       );
 
-      if (response.status === 200) {
+      if (response.data.status === 1) {
         const token = response.data.token;
         const d = new Date();
         d.setTime(d.getTime() + 1 * 60 * 60 * 1000);

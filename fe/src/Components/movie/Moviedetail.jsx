@@ -4,16 +4,20 @@ import { NavLink } from "react-router-dom";
 import { FaStar, FaHeart } from "react-icons/fa";
 import { FiCalendar, FiThumbsUp, FiUserCheck } from "react-icons/fi";
 import { FaRegClock } from "react-icons/fa6";
-import { Rate } from 'antd';
+import { Rate, Modal, Flex } from 'antd';
+import Cookies from "js-cookie";
 import VideoModal from "../trailer/VideoModal";
 
 const Moviedetail = ({ id }) => {
   const [movie, setMovie] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [videoId, setVideoId] = useState("");
-  const [check, setCheck] = useState(false);
+  const [like, setLike] = useState(false);
+  const [rate, setRate] = useState(false);
   const [value, setValue] = useState("3");
   const desc = ['terrible', 'bad', 'normal', 'good', 'wonderful'];
+
+  const isLoggedIn = document.cookie.includes("token=");
   const openModal = (id) => {
     setVideoId(id);
     setIsModalOpen(true);
@@ -21,12 +25,78 @@ const Moviedetail = ({ id }) => {
 
   const closeModal = () => {
     setIsModalOpen(false);
-    setVideoId(""); // Reset videoId khi đóng modal
+    setVideoId("");
   };
 
-  const test = () => {
-    console.log("Test");
-    setCheck(check => !check);
+  const handleLike = async () => {
+    const storedToken = Cookies.get("token");
+
+    if (!isLoggedIn) {
+      alert("Phải đăng nhập trước");
+      return;
+    }
+
+    setLike((like) => !like);
+
+    try {
+
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/yeu-thich/${id}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${storedToken}`,
+          },
+        }
+      );
+
+      if (response.data.status === 1) {
+        if (response.data.desc === "insert") {
+          console.log("Thêm thành công");
+          setLike(true)
+        } else {
+          console.log("Xóa thành công");
+          setLike(false)
+        }
+      } else {
+        console.log("Có lỗi xảy ra");
+      }
+    } catch (e) {
+      console.log("Error: ", e);
+      alert("Có lỗi xảy ra khi thực hiện hành động yêu thích");
+    }
+  };
+  const fetchDataLike = async () => {
+    const storedToken = Cookies.get("token");
+
+    if (!storedToken) {
+      console.log("No token found. Please log in.");
+      return;
+    }
+
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/api/yeu-thich/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${storedToken}`,
+          },
+        }
+      );
+
+      if (response.data.status === 1) {
+        setLike(true)
+      } else {
+        setLike(false)
+      }
+    } catch (e) {
+      console.log("Error:", e);
+    }
+  };
+
+
+  const handleRate = () => {
+    setRate(rate => !rate);
   }
 
   useEffect(() => {
@@ -40,7 +110,7 @@ const Moviedetail = ({ id }) => {
         console.error("Lỗi khi lấy danh sách phim:", error);
       }
     };
-
+    fetchDataLike();
     fetchMovies();
   }, [id]);
 
@@ -73,26 +143,24 @@ const Moviedetail = ({ id }) => {
               <div className="flex-1">
                 <div className="mb-3 flex gap-1">
                   <div
-                    onClick={test}
+                    onClick={handleLike}
                     className="flex gap-1 text-[13px] items-center justify-center cursor-pointer text-[#283e59] py-1 px-2 rounded-[3px] bg-[#edf2f9] hover:bg-[#d0ddef]"
                   >
-                    <FaHeart className={check ? "text-red-500" : ""} />
-                    <span className={check ? "text-red-500" : ""}>{check ? "Đã thích" : "Thích"}</span>
+                    <FaHeart className={like ? "text-red-500" : ""} />
+                    <span className={like ? "text-red-500" : ""}>{like ? "Đã thích" : "Thích"}</span>
                   </div>
                   <div
-                    href="#"
+                    onClick={handleRate}
                     className="flex gap-1 text-[13px] items-center justify-center cursor-pointer text-[#283e59] py-1 px-2 rounded-[3px] bg-[#edf2f9] hover:bg-[#d0ddef]"
                   >
                     <FaStar /> Đánh giá
                   </div>
-                  <div>
-                    {check && (
-                      <>
-                        <Rate value={value} tooltips={desc} onChange={setValue} />
-                        <span className="ant-rate-text">{desc[value - 1]}</span>
-                      </>
-                    )}
-                  </div>
+                  <Modal open={rate} onOk={handleRate} onCancel={handleRate} >
+                    <Flex className="gap-[10px]">
+                      <Rate value={value} tooltips={desc} onChange={setValue} />
+                      <span className="ant-rate-text">{desc[value - 1]}</span>
+                    </Flex>
+                  </Modal>
                   <NavLink
                     to={`/trailer/${movie.id_phim}`}
                     onClick={(e) => {
@@ -170,7 +238,7 @@ const Moviedetail = ({ id }) => {
         <div className="bg-black bg-opacity-70 absolute top-0 left-0 w-full h-full"></div>
       </div>
       <VideoModal isOpen={isModalOpen} onClose={closeModal} videoId={videoId} />
-    </div>
+    </div >
   );
 };
 

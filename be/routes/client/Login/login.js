@@ -22,7 +22,7 @@ router.post("/", async (req, res) => {
         console.error("Lỗi khi lấy danh sách users:", err);
         return res
           .status(500)
-          .json({ status: 1, message: "Lỗi khi lấy dữ liệu" });
+          .json({  message: "Lỗi khi lấy dữ liệu" });
       }
 
       if (results.length === 0) {
@@ -34,7 +34,7 @@ router.post("/", async (req, res) => {
         secretKey,
         { expiresIn: "1h" }
       );
-      res.status(200).json({ status: 1, data: results, token: token });
+      res.json({ status: 1, data: results, token: token });
     });
   } catch (error) {
     console.error("Lỗi kết nối:", error);
