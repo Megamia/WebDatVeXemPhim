@@ -17,7 +17,7 @@ router.get("/", (req, res) => {
 
 router.get("/:id", (req, res) => {
   const movieId = req.params.id; // Lấy ID phim từ tham số URL
-  const query = "SELECT * FROM phim WHERE id_phim = ?"; // Câu lệnh SQL lấy thông tin phim theo ID
+  const query = "SELECT * FROM phim WHERE id_phim = ?";
 
   db.query(query, [movieId], (err, results) => {
     if (err) {

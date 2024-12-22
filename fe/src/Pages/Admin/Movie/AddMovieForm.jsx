@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios"; // Import axios
+import { Select } from "antd";
 
-const AddMovieForm = () => {
+const AddMovieForm = ({ onAddSuccess }) => {
   const [poster, setPoster] = useState(null);
   const [background, setBackground] = useState(null);
+  const [ageLimits, setAgeLimits] = useState([]);
   const [movie, setMovie] = useState({
     ten_phim: "",
     mo_ta: "",
@@ -13,6 +15,21 @@ const AddMovieForm = () => {
     ten_phu: "",
     gioi_han_do_tuoi: "",
   });
+
+  useEffect(() => {
+    const fetchAgeLimits = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/api/admin/do-tuoi`
+        );
+        setAgeLimits(response.data);
+      } catch (error) {
+        console.error("Lỗi khi lấy dữ liệu giới hạn độ tuổi:", error);
+      }
+    };
+
+    fetchAgeLimits();
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -33,14 +50,19 @@ const AddMovieForm = () => {
     });
 
     try {
-      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/movies/add`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data", // Thiết lập kiểu nội dung
-        },
-      });
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/movies/add`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data", // Thiết lập kiểu nội dung
+          },
+        }
+      );
 
       console.log("Phim đã được thêm:", response.data);
       alert("Phim đã được thêm thành công!");
+      onAddSuccess();
     } catch (error) {
       if (error.response) {
         // Yêu cầu đã được gửi và server đã trả về mã trạng thái ngoài 2xx
@@ -155,15 +177,20 @@ const AddMovieForm = () => {
         <label className="block text-gray-700 text-sm font-bold mb-2">
           Giới Hạn Độ Tuổi
         </label>
-        <input
-          type="text"
-          name="gioi_han_do_tuoi"
-          value={movie.gioi_han_do_tuoi}
-          onChange={handleInputChange}
-          className="w-full px-4 py-2 border border-gray-300 rounded-md"
-          placeholder="Nhập giới hạn độ tuổi"
-          required
-        />
+        <Select
+          value={movie.gioi_han_do_tuoi} // Giá trị hiện tại của độ tuổi
+          onChange={(value) =>
+            handleInputChange({ target: { name: "gioi_han_do_tuoi", value } })
+          }
+          className="w-full"
+          placeholder="Chọn giới hạn độ tuổi"
+        >
+          {ageLimits.map((ageLimit) => (
+            <Select.Option key={ageLimit.id} value={ageLimit.id}>
+              {ageLimit.mo_ta}
+            </Select.Option>
+          ))}
+        </Select>
       </div>
 
       <div className="mb-4">
