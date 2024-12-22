@@ -37,7 +37,7 @@ router.get("/:id", authenticateToken, async (req, res) => {
             .promise()
             .query(checkMovieQuery, [userId, movieId]);
 
-        console.log(existingUser);
+        // console.log(existingUser);
         if (existingUser.length === 0) {
             return res.json({
                 status: 0,

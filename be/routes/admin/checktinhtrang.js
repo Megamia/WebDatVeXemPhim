@@ -22,7 +22,7 @@ const checkAndUpdateSuatChieu = () => {
             if (updateErr) {
               console.error("Lỗi khi cập nhật tình trạng suất chiếu:", updateErr);
             } else {
-              console.log(`Đã cập nhật tình trạng suất chiếu với ID: ${suatChieu.id}`);
+              // console.log(`Đã cập nhật tình trạng suất chiếu với ID: ${suatChieu.id}`);
             }
           });
         });

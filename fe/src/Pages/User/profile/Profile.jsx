@@ -6,7 +6,6 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import Cookies from "js-cookie";
 import DetailProfile from "./Swap/DetailProfile";
-import Test2 from "./Swap/test2";
 import Test3 from "./Swap/test3";
 import Favorite from "./Swap/Favorite";
 
@@ -24,7 +23,7 @@ const Profile = () => {
         return <DetailProfile reloadData={fetchData} />;
       case "Favorite":
         return <Favorite />;
-      case "Test3":
+      case "Admin":
         return <Test3 />;
       default:
         return null;
@@ -76,7 +75,7 @@ const Profile = () => {
       <Flex className=" max-w-[1140px] flex-1 mt-[110px] mb-[10px] w-full bg-[#140F29] border-[1px] border-white">
         <Flex
           vertical
-          className=" min-h-[600px] border-white border-r-[1px] w-[250px] items-center "
+          className=" min-h-[600px] border-white border-r-[1px] w-[300px] items-center "
         >
           <Flex vertical className="items-center p-[20px]">
             <img
@@ -87,7 +86,7 @@ const Profile = () => {
             <span className="text-[25px] text-white">Username: {username}</span>
             <span className="text-[25px] text-white">Email: {email}</span>
           </Flex>
-          <Flex vertical className=" flex-1 w-full justify-center">
+          <Flex vertical className=" flex-1 w-full text-center">
             <button
               onClick={() => handlePageChange("DetailProfile")}
               className="text-white text-[20px] hover:bg-blue-500 p-[20px]"
@@ -101,10 +100,10 @@ const Profile = () => {
               Favorite
             </button>
             <button
-              onClick={() => handlePageChange("Test3")}
+              onClick={() => handlePageChange("Admin")}
               className="text-white text-[20px] hover:bg-blue-500 p-[20px]"
             >
-              Test3
+              Admin
             </button>
           </Flex>
         </Flex>

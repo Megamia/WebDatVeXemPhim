@@ -29,7 +29,7 @@ const authenticateToken = (req, res, next) => {
 
 router.get("/", authenticateToken, async (req, res) => {
     try {
-        const { userId } = req.user; // Lấy userId từ token
+        const { userId } = req.user; 
 
         const getFavoritesQuery = `
         SELECT p.id_phim, p.ten_phim, p.mo_ta, p.poster, p.background

@@ -11,12 +11,12 @@ const path = require("path");
 
 // Cho phép truy cập các file tĩnh
 app.use(
-    "/uploads/posters/",
-    express.static(path.join(__dirname, "uploads/posters/"))
+  "/uploads/posters/",
+  express.static(path.join(__dirname, "uploads/posters/"))
 );
 app.use(
-    "/uploads/backgrounds/",
-    express.static(path.join(__dirname, "uploads/backgrounds/"))
+  "/uploads/backgrounds/",
+  express.static(path.join(__dirname, "uploads/backgrounds/"))
 );
 
 // Import routes
@@ -37,18 +37,19 @@ const dangkyRoutes = require("./routes/client/Signup/signup");
 const hosoRoutes = require("./routes/client/Profile/profile");
 const yeuthichRoutes = require("./routes/client/Like/like");
 const listyeuthichRoutes = require("./routes/client/ListLike/listlike");
+const danhgiaRoutes = require("./routes/client/Rate/rate");
 
 app.use("/api/users", userRoutes);
 app.use("/api/movies", movieRoutes);
 app.use("/api/rooms", roomRoutes);
 app.use("/api/lich-chieu", lichchieuRoutes);
-app.use("/api/suat-chieu",suatchieuRoutes);
-app.use("/api/thanh-toan",thanhtoanRoutes);
-app.use("/api/the-loai",theloaiRoutes);
-app.use("/api/nghe-si",nghesiRoutes);
-app.use("/api/admin/do-tuoi",dotuoiRoutes);
-app.use("/api/admin/artist",artistRoutes);
-app.use("/api/admin/suat-chieu",suatchieuadminRoutes);
+app.use("/api/suat-chieu", suatchieuRoutes);
+app.use("/api/thanh-toan", thanhtoanRoutes);
+app.use("/api/the-loai", theloaiRoutes);
+app.use("/api/nghe-si", nghesiRoutes);
+app.use("/api/admin/do-tuoi", dotuoiRoutes);
+app.use("/api/admin/artist", artistRoutes);
+app.use("/api/admin/suat-chieu", suatchieuadminRoutes);
 checkAndUpdateSuatChieu();
 setInterval(checkAndUpdateSuatChieu, 10 * 60 * 1000);
 app.use("/api/dang-nhap", dangnhapRoutes);
@@ -56,7 +57,8 @@ app.use("/api/dang-ky", dangkyRoutes);
 app.use("/api/ho-so", hosoRoutes);
 app.use("/api/yeu-thich", yeuthichRoutes);
 app.use("/api/list-yeu-thich", listyeuthichRoutes);
+app.use("/api/danh-gia", danhgiaRoutes);
 // Chạy server
 app.listen(port, () => {
-    console.log(`Server đang chạy tại http://localhost:${port}`);
+  console.log(`Server đang chạy tại http://localhost:${port}`);
 });
