@@ -79,26 +79,6 @@ router.post("/", authenticateToken, async (req, res) => {
             return res.status(400).json({ message: "Missing required fields" });
         }
 
-<<<<<<< HEAD
-        // Kiểm tra xem người dùng có tồn tại trong cơ sở dữ liệu không
-        const checkUserExistsQuery = `
-      SELECT * FROM Users WHERE userid = ?
-    `;
-        db.query(checkUserExistsQuery, [userId], (err, userResults) => {
-            if (err) {
-                console.error("Database error:", err);
-                return res
-                    .status(500)
-                    .json({ message: "Internal server error" });
-            }
-
-            if (userResults.length === 0) {
-                return res.status(404).json({ message: "User not found" });
-            }
-
-            // Tiến hành cập nhật thông tin người dùng
-            const query = `
-=======
     const checkUserExistsQuery = `
       SELECT * FROM Users WHERE userid = ?
     `;
@@ -114,44 +94,11 @@ router.post("/", authenticateToken, async (req, res) => {
       const hashedPassword = await bcrypt.hash(password, 10);
 
       const query = `
->>>>>>> 44fd4e0b884479c13b8d1afa3e994b2a79a2e3a2
         UPDATE Users 
         SET username = ?, email = ?, password = ? 
         WHERE userid = ?
       `;
 
-<<<<<<< HEAD
-            db.query(
-                query,
-                [username, email, password, userId],
-                (err, results) => {
-                    if (err) {
-                        console.error("Database error:", err);
-                        return res
-                            .status(500)
-                            .json({ message: "Internal server error" });
-                    }
-
-                    // Kiểm tra số dòng bị ảnh hưởng và thay đổi thực sự
-                    if (results.changedRows > 0 || results.affectedRows > 0) {
-                        return res.status(200).json({
-                            message:
-                                "User information has been updated successfully",
-                        });
-                    } else {
-                        // Nếu không có thay đổi nhưng dữ liệu đã tồn tại
-                        return res.status(400).json({
-                            message: "No changes detected in user information",
-                        });
-                    }
-                }
-            );
-        });
-    } catch (error) {
-        console.error("Error:", error);
-        res.status(500).json({ message: "Internal server error" });
-    }
-=======
       db.query(query, [username, email, hashedPassword, userId], (err, results) => {
         if (err) {
           console.error("Database error:", err);
@@ -173,7 +120,6 @@ router.post("/", authenticateToken, async (req, res) => {
     console.error("Error:", error);
     res.status(500).json({ message: "Internal server error" });
   }
->>>>>>> 44fd4e0b884479c13b8d1afa3e994b2a79a2e3a2
 });
 
 // await pool

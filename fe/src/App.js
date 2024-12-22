@@ -6,40 +6,13 @@ import MovieInfor from './Pages/Movie/MovieInfor';
 import MovieShowtimes from './Pages/Movie/MovieShowtimes';
 import BuyTickets from './Pages/BuyTickets/BuyTickets';
 import Pay from './Pages/Pay/Pay';
-import TicketInfo from './Pages/TicketInfo/TicketInfo';
+import TicketInfo from "./Pages/TicketInfo/TicketInfo";
 import CategoryList from './Pages/Admin/Category/CategoryList';
 import MovieList from './Pages/Admin/Movie/MovieList';
 import ArtistList from './Pages/Admin/Artist/ArtistList';
 import MovieSchedule from './Pages/Admin/MovieSchedule/MovieSchedule';
 import Login from "./Pages/User/login/Login";
 import Profile from "./Pages/User/profile/Profile";
-<<<<<<< HEAD
-import Favorite from "./Pages/User/favorite/Favorite";
-
-function App() {
-    const handleContextMenu = (e) => {
-        e.preventDefault();
-    };
-    return (
-        <div className="App " onContextMenu={handleContextMenu}>
-            <Router>
-                <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/phim/" element={<MovieInfor />} />
-                    <Route path="/phim/:id" element={<MovieInfor />} />
-                    <Route
-                        path="/lich-chieu/:id"
-                        element={<MovieShowtimes />}
-                    />
-                    <Route path="/mua-ve/:id" element={<BuyTickets />} />
-                    <Route path="/thanh-toan/:id" element={<Pay />} />
-                    <Route path="/dang-nhap/" element={<Login />} />
-                    <Route path="/ho-so/" element={<Favorite />} />
-                </Routes>
-            </Router>
-        </div>
-    );
-=======
 // import DetailProfile from "./Pages/User/profile/Swap/DetailProfile";
 
 function App() {
@@ -67,7 +40,6 @@ function App() {
       </Router>
     </div>
   );
->>>>>>> 44fd4e0b884479c13b8d1afa3e994b2a79a2e3a2
 }
 
 export default App;

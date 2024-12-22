@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./style.css";
 import { useNavigate } from "react-router-dom";
-// import NotificationModal from "./NotificationModal";
 import axios from "axios";
 import styles from "./style.module.scss";
 import { ToastContainer, toast } from "react-toastify";
@@ -9,7 +8,7 @@ import Swal from "sweetalert2";
 import "react-toastify/dist/ReactToastify.css";
 import Header from "../../../Components/header/Header";
 import Footer from "../../../Components/footer/Footer";
-// import { FaFacebookF } from "react-icons/fa";
+import { Flex } from "antd";
 const Login = () => {
   const navigate = useNavigate();
 
@@ -61,8 +60,6 @@ const Login = () => {
       theme: "colored",
     });
   };
-
-
 
   useEffect(() => {
     document.title = "Đăng nhập";
@@ -155,11 +152,9 @@ const Login = () => {
       if (response.data.status === 1) {
         dangkythanhcong();
         handleLoginClick();
-      }
-      else if (response.data.status === 0) {
+      } else if (response.data.status === 0) {
         nguoidungtontai();
-      }
-      else {
+      } else {
         dangkythatbai();
       }
     } catch (error) {
@@ -179,12 +174,13 @@ const Login = () => {
   };
   return (
     <>
-      <div className=" w-full bg-[#33173C] flex-col items-center flex">
+      <div className=" w-full min-h-screen bg-[#33173C] flex-col items-center flex">
         <Header />
-        <div className=" flex w-[1140px] items-center justify-center bg-[#141414] mt-[100px]">
+        <Flex className=" max-w-[1140px] flex-1 mt-[110px] mb-[10px] w-full bg-none ">
           <div
-            className={`container flex flex-1 ${isSignUpActive ? "right-panel-active" : ""
-              }`}
+            className={`container flex flex-1 ${
+              isSignUpActive ? "right-panel-active" : ""
+            }`}
           >
             <div className="form-container sign-up-container ">
               <form
@@ -316,8 +312,8 @@ const Login = () => {
                 <div className="overlayLogin-panel overlayLogin-left welcome">
                   <h1 className="font-bold m-0">Welcome Back!</h1>
                   <p className="text-sm font-light leading-5 tracking-wider my-20">
-                    To keep connected with us please login with your
-                    personal info
+                    To keep connected with us please login with your personal
+                    info
                   </p>
                   <button
                     className=" bg-red-500 border-red-500 text-white font-bold text-xs uppercase py-3 px-12 rounded-full border border-solid  transition-transform duration-80 ease-in focus:outline-none active:scale-95"
@@ -341,8 +337,8 @@ const Login = () => {
               </div>
             </div>
           </div>
-        </div>
-        <Footer />
+        </Flex>
+        <Footer className="bottom-0 absolute w-full justify-center" />
       </div>
       <ToastContainer />
     </>

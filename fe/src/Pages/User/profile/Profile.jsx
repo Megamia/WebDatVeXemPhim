@@ -8,6 +8,7 @@ import Cookies from "js-cookie";
 import DetailProfile from "./Swap/DetailProfile";
 import Test2 from "./Swap/test2";
 import Test3 from "./Swap/test3";
+import Favorite from "./Swap/Favorite";
 
 const Profile = () => {
   const [user, setUser] = useState("");
@@ -21,8 +22,8 @@ const Profile = () => {
       //     return <Profile fetchData={fetchData} />;
       case "DetailProfile":
         return <DetailProfile reloadData={fetchData} />;
-      case "Test2":
-        return <Test2 />;
+      case "Favorite":
+        return <Favorite />;
       case "Test3":
         return <Test3 />;
       default:
@@ -75,7 +76,7 @@ const Profile = () => {
       <Flex className=" max-w-[1140px] flex-1 mt-[110px] mb-[10px] w-full bg-[#140F29] border-[1px] border-white">
         <Flex
           vertical
-          className="border-white border-r-[1px] w-[350px] items-center "
+          className=" min-h-[600px] border-white border-r-[1px] w-[250px] items-center "
         >
           <Flex vertical className="items-center p-[20px]">
             <img
@@ -94,10 +95,10 @@ const Profile = () => {
               Thông tin tài khoản
             </button>
             <button
-              onClick={() => handlePageChange("Test2")}
+              onClick={() => handlePageChange("Favorite")}
               className="text-white text-[20px] hover:bg-blue-500 p-[20px]"
             >
-              Test2
+              Favorite
             </button>
             <button
               onClick={() => handlePageChange("Test3")}
