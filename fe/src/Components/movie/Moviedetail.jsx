@@ -18,6 +18,10 @@ const Moviedetail = ({ id }) => {
   const [userRating, setUserRating] = useState(false);
   const [checkRate, setCheckRate] = useState(3);
   const [rating, setRating] = useState(0);
+  const [dataActor, setDataActor] = useState("");
+  const [dataDirector, setDataDirector] = useState("");
+  const [dataCategory, setDataCategory] = useState("");
+  const [dataManufacturer, setDataManufacturer] = useState("");
 
   const desc = ["terrible", "bad", "normal", "good", "wonderful"];
 
@@ -124,7 +128,10 @@ const Moviedetail = ({ id }) => {
           },
         }
       );
-      setIsModalOpenModal(false);
+      if (response.data.status === 1) {
+        setIsModalOpenModal(false);
+        setUserRating(true)
+      }
       fetchDataRating();
     } catch (e) {
       console.error("Error: ", e.response ? e.response.data : e.message);
@@ -169,8 +176,7 @@ const Moviedetail = ({ id }) => {
 
       if (response.data.status === 1) {
         setRating(Math.floor(response.data.data.percentageAbove3));
-      } else {
-        console.log("Thất bại", response.data.message);
+        setUserRating(true);
       }
     } catch (e) {
       console.log("Error: ", e);
@@ -192,7 +198,27 @@ const Moviedetail = ({ id }) => {
     fetchMovies();
     fetchDataRating();
     fetchUserRating();
+    fetchDataMovies();
   }, [id]);
+
+  const fetchDataMovies = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/api/admin/artist/${id}`
+      );
+      const dienVien = response.data.dien_vien.map(dv => dv.ten).join(', ');
+      setDataActor(dienVien);
+      const daoDien = response.data.dao_dien.map(dv => dv.ten).join(', ');
+      setDataDirector(daoDien);
+      const nhaSanXuat = response.data.nha_san_xuat.map(dv => dv.ten).join(', ');
+      setDataManufacturer(nhaSanXuat);
+      const theLoai = response.data.the_loai.map(dv => dv.ten).join(', ');
+      setDataCategory(theLoai);
+    } catch (e) {
+      console.log("Error: ", e);
+
+    }
+  }
 
   return (
     <div className="relative">
@@ -235,7 +261,7 @@ const Moviedetail = ({ id }) => {
                     onClick={handleOpenRate}
                     className="flex gap-1 text-[13px] items-center justify-center cursor-pointer text-[#283e59] py-1 px-2 rounded-[3px] bg-[#edf2f9] hover:bg-[#d0ddef]"
                   >
-                    <FaHeart className={userRating ? "text-red-500" : ""} />
+                    <FaStar className={userRating ? "text-red-500" : ""} />
                     <span className={userRating ? "text-red-500" : ""}>
                       {userRating ? "Đã đánh giá" : "Đánh giá"}
                     </span>
@@ -304,23 +330,28 @@ const Moviedetail = ({ id }) => {
                   </div>
                 </div>
               </div>
-              <div className="w-2/5 px-3 text-[15px]">
+              <Flex vertical gap={10} className="w-2/5 px-3 text-[15px] ">
                 <p>
                   <strong>Diễn viên</strong>
                   <br />
-                  <span>List</span>
+                  <span className="text-red-400 font-bold">{dataActor ? dataActor : "Null"}</span>
                 </p>
                 <p>
                   <strong>Đạo diễn</strong>
                   <br />
-                  <span>List</span>
+                  <span className="text-red-400 font-bold">{dataDirector ? dataDirector : "Null"}</span>
                 </p>
                 <p>
                   <strong>Nhà sản xuất</strong>
                   <br />
-                  <span>List</span>
+                  <span className="text-red-400 font-bold">{dataManufacturer ? dataManufacturer : "Null"}</span>
                 </p>
-              </div>
+                <p>
+                  <strong>Thể loại</strong>
+                  <br />
+                  <span className="text-red-400 font-bold">{dataCategory ? dataCategory : "Null"}</span>
+                </p>
+              </Flex>
             </div>
           </div>
         </div>

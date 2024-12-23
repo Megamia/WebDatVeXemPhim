@@ -42,7 +42,7 @@ const DetailProfile = ({ reloadData }) => {
           },
         }
       );
-      const { userInfo } = response.data;
+      const { userInfo } = response.data.data;
       setUser(userInfo);
       setUsername(userInfo.username);
       setEmail(userInfo.email);

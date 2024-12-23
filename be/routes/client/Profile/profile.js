@@ -49,17 +49,18 @@ router.get("/", authenticateToken, async (req, res) => {
       }
 
       const userInfoFromDB = results[0];
-      const isAdmin = userInfoFromDB["isAdmin"];
+
+      const isAdmin = userInfoFromDB["userid"] === 1;
 
       const response = {
-        message: isAdmin === 1 ? "User is Admin" : "User isn't Admin",
+        message: isAdmin ? "User is Admin" : "User isn't Admin",
         userInfo: {
           ...userInfoFromDB,
           isAdmin,
         },
       };
 
-      return res.status(200).json(response);
+      return res.json({ role: isAdmin, data: response });
     });
   } catch (error) {
     console.error("Error:", error);

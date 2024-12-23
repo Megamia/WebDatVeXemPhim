@@ -6,25 +6,30 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import Cookies from "js-cookie";
 import DetailProfile from "./Swap/DetailProfile";
-import Test3 from "./Swap/test3";
 import Favorite from "./Swap/Favorite";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
   const [user, setUser] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
+  const [checkAdmin, setCheckAdmin] = useState(false)
   const [currentPage, setCurrentPage] = useState("DetailProfile");
-
+  const navigate = useNavigate();
   const renderPage = () => {
     switch (currentPage) {
-      //   case "Profile":
-      //     return <Profile fetchData={fetchData} />;
       case "DetailProfile":
         return <DetailProfile reloadData={fetchData} />;
       case "Favorite":
         return <Favorite />;
       case "Admin":
-        return <Test3 />;
+        console.log(checkAdmin);
+
+        if (checkAdmin) {
+          navigate("/admin/the-loai");
+        }
+        console.log("Lỗi");
+        return null;
       default:
         return null;
     }
@@ -56,7 +61,11 @@ const Profile = () => {
           },
         }
       );
-      const { userInfo } = response.data;
+      console.log(response);
+
+      setCheckAdmin(response.data.role)
+
+      const { userInfo } = response.data.data;
       setUser(userInfo);
       setUsername(userInfo.username);
       setEmail(userInfo.email);
@@ -99,12 +108,14 @@ const Profile = () => {
             >
               Favorite
             </button>
-            <button
-              onClick={() => handlePageChange("Admin")}
-              className="text-white text-[20px] hover:bg-blue-500 p-[20px]"
-            >
-              Admin
-            </button>
+            {checkAdmin && (
+              <button
+                onClick={() => handlePageChange("Admin")}
+                className="text-white text-[20px] hover:bg-blue-500 p-[20px]"
+              >
+                Admin
+              </button>
+            )}
           </Flex>
         </Flex>
         <Flex className="flex-1">{renderPage()}</Flex>

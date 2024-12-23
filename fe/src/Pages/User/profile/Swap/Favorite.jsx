@@ -26,7 +26,7 @@ const Favorite = () => {
         title: "Bạn chưa đăng nhập!",
         icon: "warning",
       });
-      navigate("/login");
+      navigate("/dang-nhap");
       return;
     }
 
@@ -39,7 +39,7 @@ const Favorite = () => {
           },
         }
       );
-      const { userInfo } = response.data;
+      const { userInfo } = response.data.data;
       setUser(userInfo);
       setUsername(userInfo.username);
       setEmail(userInfo.email);
