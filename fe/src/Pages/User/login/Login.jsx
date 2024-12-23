@@ -135,10 +135,10 @@ const Login = () => {
       return;
     }
 
-    if (username === "admin") {
-      alert("Không được đăng kí với username=admin");
-      return;
-    }
+    // if (username === "admin") {
+    //   alert("Không được đăng kí với username=admin");
+    //   return;
+    // }
 
     try {
       const response = await axios.post(

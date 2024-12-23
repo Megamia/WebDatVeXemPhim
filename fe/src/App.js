@@ -1,12 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Navigate,
-  useNavigate,
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./Pages/Home/Home";
 import MovieInfor from "./Pages/Movie/MovieInfor";
 import MovieShowtimes from "./Pages/Movie/MovieShowtimes";
@@ -32,8 +26,8 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       const storedToken = Cookies.get("token");
+
       if (!storedToken) {
-        Swal.fire({ title: "Bạn chưa đăng nhập!", icon: "warning" });
         setLoading(false);
         return;
       }
@@ -45,6 +39,8 @@ function App() {
             headers: { Authorization: `Bearer ${storedToken}` },
           }
         );
+        console.log(response);
+
         const isAdmin = response.data.role === true;
         setCheckAdmin(isAdmin);
       } catch (error) {
@@ -75,63 +71,20 @@ function App() {
           <Route path="/thong-tin-ve/:code" element={<TicketInfo />} />
           <Route path="/dang-nhap/" element={<Login />} />
           <Route path="/ho-so/" element={<Profile />} />
-          <Route
-            path="/admin/the-loai"
-            element={
-              <ProtectedRoute
-                element={<CategoryList />}
-                condition={checkAdmin}
-              />
-            }
-          />
-          <Route
-            path="/admin/phim"
-            element={
-              <ProtectedRoute element={<MovieList />} condition={checkAdmin} />
-            }
-          />
-          <Route
-            path="/admin/nghe-si"
-            element={
-              <ProtectedRoute element={<ArtistList />} condition={checkAdmin} />
-            }
-          />
-          <Route
-            path="/admin/suat-chieu"
-            element={
-              <ProtectedRoute
-                element={<MovieSchedule />}
-                condition={checkAdmin}
-              />
-            }
-          />
+          {checkAdmin !== null && checkAdmin === true ? (
+            <>
+              <Route path="/admin/the-loai" element={<CategoryList />} />
+              <Route path="/admin/phim" element={<MovieList />} />
+              <Route path="/admin/nghe-si" element={<ArtistList />} />
+              <Route path="/admin/suat-chieu" element={<MovieSchedule />} />
+            </>
+          ) : (
+            <Route path="/" element={<Home />} />
+          )}
         </Routes>
       </Router>
     </div>
   );
 }
-
-const ProtectedRoute = ({ element, condition }) => {
-  const navigate = useNavigate();
-  console.log("con: ", condition);
-
-  useEffect(() => {
-    if (condition === false || condition === undefined) {
-      Swal.fire({
-        title: "Bạn không có quyền truy cập!",
-        text: "Vui lòng đăng nhập với quyền admin.",
-        icon: "warning",
-        confirmButtonText: "Đăng nhập",
-      }).then(() => {
-        document.cookie =
-          "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-        navigate("/dang-nhap");
-        return null;
-      });
-    }
-  }, [condition, navigate]);
-
-  return element;
-};
 
 export default App;
